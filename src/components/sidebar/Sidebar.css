@@ -1,0 +1,14 @@
+/* Sidebar container */
+.sidebar {
+  width: 350px;
+  background-color: #f4f4f4;
+  padding: 10px;
+  height: 100vh;
+  overflow-y: auto;
+  border-right: 1px solid #ddd;
+}
+
+/* tree node element*/
+.tree-node {
+  margin-left: 20px;
+}
