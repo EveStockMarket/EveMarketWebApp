@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class EvemarketApplication {
+public class EveMarketApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(EvemarketApplication.class, args);
+        SpringApplication.run(EveMarketApplication.class, args);
     }
 
 }

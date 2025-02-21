@@ -1,0 +1,22 @@
+package org.zerodebug.evemarket.eveAPI;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import reactor.core.publisher.Mono;
+
+@RestController
+@RequestMapping(path = "/api/v1/orders")
+public class EveAPIController {
+    EveAPIService eveAPIService;
+    @Autowired
+    public EveAPIController(EveAPIService eveAPIService) {
+        this.eveAPIService = eveAPIService;
+    }
+    @GetMapping("{region_id}/{type_id}")
+    public Mono<String> getOrders(@PathVariable String region_id, @PathVariable String type_id) {
+        return eveAPIService.getOrders(region_id, type_id);
+    }
+}
