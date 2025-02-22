@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @RestController
 @RequestMapping(path = "/api/v1/orders")
 public class EveAPIController {
@@ -15,8 +19,10 @@ public class EveAPIController {
     public EveAPIController(EveAPIService eveAPIService) {
         this.eveAPIService = eveAPIService;
     }
+    List<String> test = new ArrayList<>(Arrays.asList("duration,issued,price,system_id,volume_remain,".split(",")));
     @GetMapping("{region_id}/{type_id}")
     public Mono<String> getOrders(@PathVariable String region_id, @PathVariable String type_id) {
-        return eveAPIService.getOrders(region_id, type_id);
+        return eveAPIService.getOrders(region_id, type_id)
+                .flatMap(order->eveAPIService.readJson(order,test));
     }
 }
