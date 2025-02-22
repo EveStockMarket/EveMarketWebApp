@@ -19,7 +19,7 @@ public class EveAPIController {
     public EveAPIController(EveAPIService eveAPIService) {
         this.eveAPIService = eveAPIService;
     }
-    List<String> test = new ArrayList<>(Arrays.asList("duration,issued,price,system_id,volume_remain,".split(",")));
+    List<String> test = new ArrayList<>(Arrays.asList("duration,issued,price,system_id,volume_remain,location_id".split(",")));
     @GetMapping("{region_id}/{type_id}")
     public Mono<String> getOrders(@PathVariable String region_id, @PathVariable String type_id) {
         return eveAPIService.getOrders(region_id, type_id)
