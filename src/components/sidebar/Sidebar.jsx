@@ -2,23 +2,45 @@ import { useState, useEffect } from "react";
 import Papa from "papaparse";
 import './Sidebar.css';
 
+// Displaying icon for the node
+function DisplayIcon({hasChildren, isOpen, node}){
+  const getIcon = () => {
+    if (!hasChildren && node.itemID) {
+      return <span className="file-text">📄 {node.name || "Unnamed Node"}</span>;
+    }
+    if (isOpen) {
+      return <img src="./src/assets/sidebar/expand-icon.png" alt="Open folder icon" className="sidebar-icon"/>;
+    }
+    return <img src="./src/assets/sidebar/diminish-icon.png" alt="Closed folder icon" className="sidebar-icon"/>;
+  };
+
+  return(
+    <span className="folder-text">
+      {getIcon()} {node.name || "Unnamed Node"}
+    </span>
+  )
+}
+
 // TreeNode component which represents a single node in the tree
-const TreeNode = ({ node }) => {
+const TreeNode = ({ node, onSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
   const hasChildren = node.children && node.children.length > 0;
 
   return (
     <div style={{ marginLeft: "20px" }}>
       <div
-        onClick={() => hasChildren && setIsOpen(!isOpen)}
-        style={{ cursor: hasChildren ? "pointer" : "default" }}
+        onClick={() => {
+          if (hasChildren) setIsOpen(!isOpen);
+          if (node.itemID) onSelect(node.itemID);
+        }}
+        style={{ cursor: "pointer" }}
       >
-        {hasChildren ? (isOpen ? "📂" : "📁") : "📄"} {node.name || "Unnamed Node"}
+        {<DisplayIcon hasChildren={hasChildren} isOpen={isOpen} node={node} />}
       </div>
       {isOpen &&
         hasChildren &&
         node.children.map((child, index) => (
-          <TreeNode key={index} node={child} />
+          <TreeNode key={index} node={child} onSelect={onSelect}/>
         ))}
     </div>
   );
@@ -27,17 +49,18 @@ const TreeNode = ({ node }) => {
 // Sidebar component
 const Sidebar = ({ marketGroupsFile, typesFile }) => {
   const [treeData, setTreeData] = useState([]);
+  const [selectedItemId, setSelectedItemId] = useState(null);
+  const [sidebarWidth, setSidebarWidth] = useState(250); // Set an initial width
+
+  const MIN_SIDEBAR_WIDTH = 150; 
+  const MAX_SIDEBAR_WIDTH = 400; 
 
   // Parse the CSV files
   useEffect(() => {
     Promise.all([loadCSV(marketGroupsFile), loadCSV(typesFile)])
       .then(([marketGroups, types]) => {
-        console.log("Market Groups Loaded:", marketGroups);
-        console.log("Types Loaded:", types);
-
         try {
           const tree = buildTree(marketGroups, types);
-          console.log("Generated Tree:", tree);
           setTreeData(tree);
         } catch (error) {
           console.error("Error building tree:", error);
@@ -114,15 +137,18 @@ const Sidebar = ({ marketGroupsFile, typesFile }) => {
     types.forEach(item => {
       const groupId = item.marketGroupID;
       const itemName = item.typeName?.trim() || "Unnamed Item";
+      const isPublished = item.published === "1";
 
-      if (groupId && groupMap[groupId]) {
+      if (groupId && groupMap[groupId] && isPublished) {
         groupMap[groupId].children.push({
           name: itemName,
+          itemID: item.typeID,
           children: [] 
         });
+      } else if (!isPublished) {
+        console.warn(`Skipped unpublished item '${itemName}'`);
       } else {
-        // Skiping items without a valid marketGroupID
-        console.warn(`Skipped item '${itemName}'`);
+        console.warn(`Skipped item '${itemName}' - invalid marketGroupID`);
       }
     });
 
@@ -145,16 +171,38 @@ const Sidebar = ({ marketGroupsFile, typesFile }) => {
       return sortNodes(rootGroups);
   };
 
+  // Handle mouse events for resizing the sidebar
+  const handleMouseDown = (e) => {
+    e.preventDefault();
+    const startX = e.clientX;
+    
+    const onMouseMove = (moveEvent) => {
+      const newWidth = sidebarWidth + (moveEvent.clientX - startX);
+      if (newWidth >= MIN_SIDEBAR_WIDTH && newWidth <= MAX_SIDEBAR_WIDTH) {
+        setSidebarWidth(newWidth);
+      }
+    };
+
+    const onMouseUp = () => {
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
+    };
+
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
+  };
+
   // Rendering the tree structure
   return (
-    <div className="sidebar">
+    <div className="sidebar" style={{ width: sidebarWidth }}>
+      <div className="resize-handle" onMouseDown={handleMouseDown} />
+      {selectedItemId && <h3>Selected Item ID: {selectedItemId}</h3>}
       {treeData.length > 0 ? (
         treeData.map((node, index) => (
-          <TreeNode key={index} node={node} />
+          <TreeNode key={index} node={node} onSelect={setSelectedItemId} />
         ))
       ) : (
-        //Display loading message - optional xD - we are so back 
-        <p>Loading data...</p>
+        <p className="login-label">Loading data...</p>
       )}
     </div>
   );

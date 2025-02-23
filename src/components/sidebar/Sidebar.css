@@ -1,14 +1,50 @@
 /* Sidebar container */
 .sidebar {
+  position: relative;
   width: 350px;
-  background-color: #f4f4f4;
+  background-color: #101010;
   padding: 10px;
   height: 100vh;
   overflow-y: auto;
   border-right: 1px solid #ddd;
 }
 
+/*change sidebar size bar*/
+.resize-handle{
+  background-color: white; 
+  width: 5px; 
+  cursor: ew-resize; 
+  position: absolute; 
+  right: 0; 
+  top: 0;
+  height: 100%; 
+}
+
+.folder-text
+{
+  color: white;
+}
+
+.file-text
+{
+  color: white;
+}
+
+.login-label
+{
+  color: white;
+  padding: 10px;
+  text-align: center;
+}
+
 /* tree node element*/
 .tree-node {
   margin-left: 20px;
+}
+
+/* expand and diminish icons*/
+.sidebar-icon{
+  width: 10px;
+  height: 10px;
+  margin-right: 5px;
 }
