@@ -9,5 +9,4 @@ public class EveMarketApplication {
     public static void main(String[] args) {
         SpringApplication.run(EveMarketApplication.class, args);
     }
-
 }

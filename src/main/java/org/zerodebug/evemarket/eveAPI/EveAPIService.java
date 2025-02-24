@@ -1,21 +1,21 @@
 package org.zerodebug.evemarket.eveAPI;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.opencsv.exceptions.CsvException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.zerodebug.evemarket.csv.CsvHandler;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.util.*;
 
 @Service
 public class EveAPIService {
     private final WebClient webClient;
     private final ObjectMapper objectMapper;
+    private CsvHandler csvHandler;
 
     public EveAPIService(WebClient.Builder webClientBuilder, ObjectMapper objectMapper) {
         this.webClient = webClientBuilder.baseUrl("https://esi.evetech.net/latest/markets/").build();
@@ -44,14 +44,32 @@ public class EveAPIService {
                     Map<String,String> map = new HashMap<>();
                     for (String key : keys) {
                         JsonNode value = jsonNode.path(key);
-                        map.put(key, value.isMissingNode() ? null : value.asText());
+                        if(key.equals("location_id")){
+                            map.put("location", value.isMissingNode() ? null : getLocationFromCSV(value.asInt()));
+                        }
+                        else if(key.equals("system_id")){
+                            map.put("system", value.isMissingNode() ? null : getSystemFromCSV(value.asInt()));
+                        }
+                        else if(key.equals("volume_remain")){
+                            map.put(key, value.isMissingNode() ? null : value.asText());
+                        }
+                        else map.put(key, value.isMissingNode() ? null : value.asText());
                     }
                     result.add(map);
                 }
                 return objectMapper.writeValueAsString(result);
-            } catch (JsonProcessingException e) {
+            } catch (IOException | CsvException e) {
                 throw new RuntimeException(e);
             }
         });
+    }
+    public String getLocationFromCSV(int id) throws CsvException, IOException {
+        CsvHandler csvHandler = new CsvHandler();
+        return csvHandler.getLocationFromCSV(id);
+    }
+
+    public String getSystemFromCSV(int id) throws CsvException, IOException{
+        CsvHandler csvHandler = new CsvHandler();
+        return  csvHandler.getSystemFromCSV(id);
     }
 }
