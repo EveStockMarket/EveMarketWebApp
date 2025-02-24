@@ -3,22 +3,32 @@ import Papa from "papaparse";
 import './Sidebar.css';
 
 // Displaying icon for the node
-function DisplayIcon({hasChildren, isOpen, node}){
+function DisplayIcon({ hasChildren, isOpen, node }) {
   const getIcon = () => {
     if (!hasChildren && node.itemID) {
-      return <span className="file-text">📄 {node.name || "Unnamed Node"}</span>;
+      return <span className="file-text"></span>;
     }
     if (isOpen) {
-      return <img src="./src/assets/sidebar/expand-icon.png" alt="Open folder icon" className="sidebar-icon"/>;
+      return <img src="./src/assets/sidebar/expand-icon.png" alt="Open folder icon" className="sidebar-icon-marker" />;
     }
-    return <img src="./src/assets/sidebar/diminish-icon.png" alt="Closed folder icon" className="sidebar-icon"/>;
+    return <img src="./src/assets/sidebar/diminish-icon.png" alt="Closed folder icon" className="sidebar-icon-marker" />;
   };
 
-  return(
+  const getNodeIcon = () => {
+    if (node.iconId) {
+      const iconPath = `./src/assets/icons/${node.iconId}_32.png`;
+      return <img src={iconPath} alt={`${node.name} icon`} className="sidebar-icon" />;
+    }
+    return <span>📁</span>;
+  };
+
+  return (
     <span className="folder-text">
-      {getIcon()} {node.name || "Unnamed Node"}
+      {getIcon()}
+      {getNodeIcon()}
+      {node.name || "Unnamed Node"}
     </span>
-  )
+  );
 }
 
 // TreeNode component which represents a single node in the tree
@@ -26,12 +36,22 @@ const TreeNode = ({ node, onSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
   const hasChildren = node.children && node.children.length > 0;
 
+  const handleSelect = () => {
+    if (onSelect) {
+      if (node.itemID) {
+        onSelect(node.itemID, node.iconId);
+      // } else if (node.marketGroupID) {
+      //   onSelect(node.marketGroupID, node.iconId);
+      }
+    }
+  };
+
   return (
-    <div style={{ marginLeft: "20px" }}>
+    <div className="tree-node">
       <div
         onClick={() => {
           if (hasChildren) setIsOpen(!isOpen);
-          if (node.itemID) onSelect(node.itemID);
+          handleSelect();
         }}
         style={{ cursor: "pointer" }}
       >
@@ -47,13 +67,14 @@ const TreeNode = ({ node, onSelect }) => {
 };
 
 // Sidebar component
-const Sidebar = ({ marketGroupsFile, typesFile }) => {
+const Sidebar = ({ marketGroupsFile, typesFile,onSelect }) => {
   const [treeData, setTreeData] = useState([]);
   const [selectedItemId, setSelectedItemId] = useState(null);
+  const [selectedItemIconId, setSelectedItemIconId] = useState(null);
   const [sidebarWidth, setSidebarWidth] = useState(250); // Set an initial width
 
   const MIN_SIDEBAR_WIDTH = 150; 
-  const MAX_SIDEBAR_WIDTH = 400; 
+  const MAX_SIDEBAR_WIDTH = 500; 
 
   // Parse the CSV files
   useEffect(() => {
@@ -114,6 +135,7 @@ const Sidebar = ({ marketGroupsFile, typesFile }) => {
           ...group,
           marketGroupID: groupId,
           name: groupName,
+          iconId: group.iconID || null,
           children: [],
         };
       } else {
@@ -143,6 +165,7 @@ const Sidebar = ({ marketGroupsFile, typesFile }) => {
         groupMap[groupId].children.push({
           name: itemName,
           itemID: item.typeID,
+          iconId: item.iconID || null,
           children: [] 
         });
       } else if (!isPublished) {
@@ -190,22 +213,32 @@ const Sidebar = ({ marketGroupsFile, typesFile }) => {
 
     document.addEventListener("mousemove", onMouseMove);
     document.addEventListener("mouseup", onMouseUp);
+  
   };
 
   // Rendering the tree structure
   return (
     <div className="sidebar" style={{ width: sidebarWidth }}>
       <div className="resize-handle" onMouseDown={handleMouseDown} />
-      {selectedItemId && <h3>Selected Item ID: {selectedItemId}</h3>}
-      {treeData.length > 0 ? (
-        treeData.map((node, index) => (
-          <TreeNode key={index} node={node} onSelect={setSelectedItemId} />
-        ))
-      ) : (
-        <p className="login-label">Loading data...</p>
-      )}
+  
+      <div className="sidebar-content">
+        {/* <h3 className="selected-item-header">Selected Item ID: {selectedItemId}</h3>
+        <h3 className="selected-item-header">Selected Item Icon ID: {selectedItemIconId}</h3> */}
+        {treeData.length > 0 ? (
+          treeData.map((node, index) => (
+            <TreeNode key={index} node={node} onSelect={(id, iconId) => { 
+              setSelectedItemId(id); 
+              setSelectedItemIconId(iconId);
+              if (onSelect) onSelect(id); 
+            }} />
+          ))
+        ) : (
+          <p className="login-label">Loading data...</p>
+        )}
+      </div>
     </div>
   );
+  
 };
 
 export default Sidebar;

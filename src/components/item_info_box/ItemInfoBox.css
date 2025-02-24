@@ -1,0 +1,22 @@
+.item-info-box {
+    background-color: #1a1a1a;
+    padding: 15px;
+    border: 1px solid #333;
+    margin-bottom: 10px;
+    color: white;
+    min-height: 150px;
+}
+
+.item-info-box h3 {
+    margin-top: 0;
+    color: #fff;
+}
+
+.item-description a {
+    color: #4da6ff;
+    text-decoration: none;
+}
+
+.item-description a:hover {
+    text-decoration: underline;
+}
