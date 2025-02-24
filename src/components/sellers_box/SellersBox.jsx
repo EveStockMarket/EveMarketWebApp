@@ -7,5 +7,5 @@ const SellersBox = () => {
     );
   };
   
-  export default SellersBox;
+export default SellersBox;
   

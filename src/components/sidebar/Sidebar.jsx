@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Papa from "papaparse";
+import SearchBar from "../search_bar/SearchBar";
 import './Sidebar.css';
 
 // Displaying icon for the node
@@ -19,7 +20,7 @@ function DisplayIcon({ hasChildren, isOpen, node }) {
       const iconPath = `./src/assets/icons/${node.iconId}_32.png`;
       return <img src={iconPath} alt={`${node.name} icon`} className="sidebar-icon" />;
     }
-    return <span>📁</span>;
+    return <span></span>;
   };
 
   return (
@@ -168,11 +169,12 @@ const Sidebar = ({ marketGroupsFile, typesFile,onSelect }) => {
           iconId: item.iconID || null,
           children: [] 
         });
-      } else if (!isPublished) {
-        console.warn(`Skipped unpublished item '${itemName}'`);
-      } else {
-        console.warn(`Skipped item '${itemName}' - invalid marketGroupID`);
       }
+      // } else if (!isPublished) {
+      //   console.warn(`Skipped unpublished item '${itemName}'`);
+      // } else {
+      //   console.warn(`Skipped item '${itemName}' - invalid marketGroupID`);
+      // }
     });
 
     // Sorting function for nodes - groups and items
@@ -224,6 +226,7 @@ const Sidebar = ({ marketGroupsFile, typesFile,onSelect }) => {
       <div className="sidebar-content">
         {/* <h3 className="selected-item-header">Selected Item ID: {selectedItemId}</h3>
         <h3 className="selected-item-header">Selected Item Icon ID: {selectedItemIconId}</h3> */}
+        <SearchBar csvFile={"/invTypes.csv"}/>
         {treeData.length > 0 ? (
           treeData.map((node, index) => (
             <TreeNode key={index} node={node} onSelect={(id, iconId) => { 
