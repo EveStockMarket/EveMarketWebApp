@@ -226,7 +226,7 @@ const Sidebar = ({ marketGroupsFile, typesFile,onSelect }) => {
       <div className="sidebar-content">
         {/* <h3 className="selected-item-header">Selected Item ID: {selectedItemId}</h3>
         <h3 className="selected-item-header">Selected Item Icon ID: {selectedItemIconId}</h3> */}
-        <SearchBar csvFile={"/invTypes.csv"}/>
+        <SearchBar txtFile={"/type_names.txt"}/>
         {treeData.length > 0 ? (
           treeData.map((node, index) => (
             <TreeNode key={index} node={node} onSelect={(id, iconId) => { 
