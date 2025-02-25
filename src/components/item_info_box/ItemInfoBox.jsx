@@ -51,13 +51,13 @@ const ItemInfoBox = ({ itemId }) => {
           <div className="item-icon-and-description">
             <div className="item-icon-container">
               <img
-                src={`./src/assets/icons/${itemId}_32.webp`}
+                src={`/assets/icons/${itemId}_32.webp`}
                 alt={itemDetails.name}
                 className="item-icon"
               />
             </div>
             <img
-              src="./src/assets/main_icons/info_icon.png"
+              src="/assets/main_icons/info_icon.png"
               alt="Info icon"
               className="info-icon"
               onClick={() => setShowDescription(!showDescription)}

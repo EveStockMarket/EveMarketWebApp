@@ -51,19 +51,19 @@ function DisplayIcon({ hasChildren, isOpen, node }) {
       return <span className="file-text"></span>;
     }
     if (isOpen) {
-      return <img src="./src/assets/sidebar/expand-icon.png" alt="Open folder icon" className="sidebar-icon-marker" />;
+      return <img src="/assets/sidebar/expand-icon.png" alt="Open folder icon" className="sidebar-icon-marker" />;
     }
-    return <img src="./src/assets/sidebar/diminish-icon.png" alt="Closed folder icon" className="sidebar-icon-marker" />;
+    return <img src="/assets/sidebar/diminish-icon.png" alt="Closed folder icon" className="sidebar-icon-marker" />;
   };
 
   const getNodeIcon = () => {
-    const iconPath = node.iconId ? `./src/assets/icons/${node.iconId}_32.webp` : './src/assets/icons/0_32.webp';
+    const iconPath = node.iconId ? `/assets/icons/${node.iconId}_32.webp` : '/assets/icons/0_32.webp';
     return (
       <LazyImage
         src={iconPath}
         alt={`${node.name} icon`}
         className="sidebar-icon"                                                             
-        fallbackSrc="./src/assets/icons/0_32.webp"
+        fallbackSrc="/assets/icons/0_32.webp"
       />
     );
   };

@@ -112,7 +112,7 @@ const SearchBar = ({ txtFile, onSelect }) => {
 
   return (
     <div className="search-bar-container">
-      <img src="./src/assets/main_icons/search_icon.png" alt="Search icon" className="search-icon" />
+      <img src="/assets/main_icons/search_icon.png" alt="Search icon" className="search-icon" />
       <input
         ref={inputRef}
         type="text"
@@ -122,8 +122,8 @@ const SearchBar = ({ txtFile, onSelect }) => {
         onKeyDown={handleKeyDown}
         placeholder="Type for search..."
       />
-      <img src="./src/assets/main_icons/filter_icon.png" alt="Filter icon" className="filter-icon" />
-      <img src="./src/assets/main_icons/settings_icon.png" alt="Settings icon" className="settings-icon" />
+      <img src="/assets/main_icons/filter_icon.png" alt="Filter icon" className="filter-icon" />
+      <img src="/assets/main_icons/settings_icon.png" alt="Settings icon" className="settings-icon" />
       {suggestions.length > 0 && (
         <ul className="suggestions-list" ref={suggestionsRef}>
           {suggestions.map((item, index) => (
