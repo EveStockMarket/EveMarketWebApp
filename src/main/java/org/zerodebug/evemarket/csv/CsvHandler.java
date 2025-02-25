@@ -6,6 +6,7 @@ import com.opencsv.exceptions.CsvException;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CsvHandler {
@@ -31,6 +32,17 @@ public class CsvHandler {
         }
         return null;
     }
+    public ArrayList<String> getAllRegionsFromCSV(String id) throws IOException, CsvException {
+        CSVReader reader = new CSVReaderBuilder(new FileReader("src/main/resources/mapRegions.csv")).build();
+        List<String[]> myEntries = reader.readAll();
+        myEntries.removeFirst();
+        ArrayList<String> answer = new ArrayList<>();
+        for(String[] array : myEntries){
+            answer.add(array[0]);
+        }
+        return answer;
+    }
+
     public String getVolumeFromCSV(int id) throws IOException, CsvException {
         CSVReader reader = new CSVReaderBuilder(new FileReader("src/main/resources/invTypes.csv")).build();
         List<String[]> myEntries = reader.readAll();
