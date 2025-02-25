@@ -16,8 +16,9 @@ import java.util.*;
 public class EveAPIService {
     private final WebClient webClient;
     private final ObjectMapper objectMapper;
+    private final CsvHandler csvHandler = new CsvHandler();
 
-    public EveAPIService(WebClient.Builder webClientBuilder, ObjectMapper objectMapper) {
+    public EveAPIService(WebClient.Builder webClientBuilder, ObjectMapper objectMapper) throws IOException, CsvException {
         this.webClient = webClientBuilder.baseUrl("https://esi.evetech.net/latest/markets/").build();
         this.objectMapper = objectMapper;
     }
@@ -34,12 +35,8 @@ public class EveAPIService {
                 .retrieve()
                 .bodyToMono(String.class);
     }
-    public Flux<String> getItemPrices(String item_id) throws IOException, CsvException {
-        CsvHandler csvHandler = new CsvHandler();
-        ArrayList<String> regions = csvHandler.getAllRegionsFromCSV(item_id);
-        for(String region:regions){
-            System.out.println(region);
-        }
+    public Flux<String> getItemPrices(String item_id){
+        ArrayList<String> regions = csvHandler.getAllRegionsFromCSV();
         List<Mono<String>> requests = new ArrayList<>();
         for (String region_id : regions) {
             Mono<String> request = webClient.get()
@@ -69,9 +66,9 @@ public class EveAPIService {
                         JsonNode value = jsonNode.path(key);
                         switch (key) {
                             case "location_id" ->
-                                    map.put("location", value.isMissingNode() ? null : getLocationFromCSV(value.asInt()));
+                                    map.put("location", value.isMissingNode() ? null : csvHandler.getLocationFromCSV(value.asInt()));
                             case "system_id" ->
-                                    map.put("system", value.isMissingNode() ? null : getSystemFromCSV(value.asInt()));
+                                    map.put("system", value.isMissingNode() ? null : csvHandler.getSystemFromCSV(value.asInt()));
                             case "volume_remain" -> map.put(key, value.isMissingNode() ? null : value.asText());
                             default -> map.put(key, value.isMissingNode() ? null : value.asText());
                         }
@@ -79,20 +76,9 @@ public class EveAPIService {
                     result.add(map);
                 }
                 return objectMapper.writeValueAsString(result);
-            } catch (IOException | CsvException e) {
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
-    }
-
-
-    public String getLocationFromCSV(int id) throws CsvException, IOException {
-        CsvHandler csvHandler = new CsvHandler();
-        return csvHandler.getLocationFromCSV(id);
-    }
-
-    public String getSystemFromCSV(int id) throws CsvException, IOException{
-        CsvHandler csvHandler = new CsvHandler();
-        return  csvHandler.getSystemFromCSV(id);
     }
 }
