@@ -1,8 +1,13 @@
+/* Kontener wyszukiwarki */
 .search-bar-container {
     position: relative;
-    width: 300px;
+    width: 100%; /* Dostosowuje się do szerokości rodzica */
+    max-width: 400px; /* Maksymalna szerokość */
+    margin: 0 0 20px 0; /* Margines od dołu, brak wyśrodkowania */
+    padding: 0;
 }
 
+/* Pole wyszukiwania */
 .search-bar-placeholder {
     width: 100%;
     padding: 8px;
@@ -10,15 +15,17 @@
     border-radius: 5px;
     font-size: 1rem;
     box-sizing: border-box;
-    outline: none;
+    outline: none; /* Usuwa niebieską obwódkę */
     transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
+/* Efekt focus bez niebieskiej ramki */
 .search-bar-placeholder:focus {
-    border-color: #4A90E2;
-    box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+    border-color: #888; /* Neutralny kolor przy focus */
+    box-shadow: 0 0 5px rgba(136, 136, 136, 0.5); /* Subtelny cień */
 }
 
+/* Lista podpowiedzi */
 .suggestions-list {
     list-style: none;
     margin: 0;
@@ -33,15 +40,31 @@
     width: 100%;
     z-index: 1000;
     box-sizing: border-box;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Delikatny cień dla listy */
 }
 
+/* Elementy listy */
 .suggestions-list li {
     padding: 8px;
     cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
+/* Podświetlenie aktywnego elementu */
 .suggestions-list li:hover,
 .suggestions-list li.highlighted {
     background-color: #4A90E2;
     color: white;
+}
+
+/* Responsywność */
+@media (max-width: 600px) {
+    .search-bar-container {
+        max-width: 90%; /* Dopasowanie do mniejszych ekranów */
+    }
+
+    .search-bar-placeholder {
+        font-size: 0.9rem;
+        padding: 6px;
+    }
 }
