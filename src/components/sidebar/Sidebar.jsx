@@ -1,8 +1,49 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Papa from "papaparse";
 import SearchBar from "../search_bar/SearchBar";
 import './Sidebar.css';
-//comment
+
+function LazyImage({ src, alt, className, fallbackSrc }) {
+  const [isVisible, setIsVisible] = useState(false);
+  const imgRef = useRef();
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (imgRef.current) {
+      observer.observe(imgRef.current);
+    }
+
+    return () => {
+      if (imgRef.current) {
+        observer.unobserve(imgRef.current);
+      }
+    };
+  }, []);
+
+  return (
+    <img
+      ref={imgRef}
+      src={isVisible ? src : fallbackSrc}
+      alt={alt}
+      className={className}
+      onError={(e) => {
+        e.target.src = fallbackSrc;
+      }}
+    />
+  );
+}
+
 // Displaying icon for the node
 function DisplayIcon({ hasChildren, isOpen, node }) {
   const getIcon = () => {
@@ -16,13 +57,13 @@ function DisplayIcon({ hasChildren, isOpen, node }) {
   };
 
   const getNodeIcon = () => {
-    const iconPath = node.iconId ? `./src/assets/icons/${node.iconId}_32.png` : './src/assets/icons/0_32.png';
+    const iconPath = node.iconId ? `./src/assets/icons/${node.iconId}_32.webp` : './src/assets/icons/0_32.webp';
     return (
-      <img
+      <LazyImage
         src={iconPath}
         alt={`${node.name} icon`}
-        className="sidebar-icon"
-        onError={(e) => { e.target.src = './src/assets/icons/0_32.png'; }}
+        className="sidebar-icon"                                                             
+        fallbackSrc="./src/assets/icons/0_32.webp"
       />
     );
   };
@@ -37,7 +78,7 @@ function DisplayIcon({ hasChildren, isOpen, node }) {
 }
 
 // TreeNode component which represents a single node in the tree
-const TreeNode = ({ node, onSelect }) => {
+const TreeNode = ({ node, onSelect, expandedNodes }) => {
   const [isOpen, setIsOpen] = useState(false);
   const hasChildren = node.children && node.children.length > 0;
 
@@ -48,6 +89,12 @@ const TreeNode = ({ node, onSelect }) => {
       }
     }
   };
+
+  useEffect(() => {
+    if (expandedNodes.includes(node.marketGroupID || node.itemID)) {
+      setIsOpen(true);
+    }
+  }, [expandedNodes, node]);
 
   return (
     <div className="tree-node">
@@ -63,7 +110,7 @@ const TreeNode = ({ node, onSelect }) => {
       {isOpen &&
         hasChildren &&
         node.children.map((child, index) => (
-          <TreeNode key={index} node={child} onSelect={onSelect} />
+          <TreeNode key={index} node={child} onSelect={onSelect} expandedNodes={expandedNodes} />
         ))}
     </div>
   );
@@ -73,8 +120,9 @@ const TreeNode = ({ node, onSelect }) => {
 const Sidebar = ({ marketGroupsFile, typesFile, onSelect }) => {
   const [treeData, setTreeData] = useState([]);
   const [sidebarWidth, setSidebarWidth] = useState(360);
+  const [expandedNodes, setExpandedNodes] = useState([]); // New state to track expanded nodes
 
-  const MIN_SIDEBAR_WIDTH = 150;
+  const MIN_SIDEBAR_WIDTH = 280;
   const MAX_SIDEBAR_WIDTH = 500;
 
   // Parse the CSV files
@@ -92,6 +140,28 @@ const Sidebar = ({ marketGroupsFile, typesFile, onSelect }) => {
         console.error("Error loading CSV files:", error);
       });
   }, [marketGroupsFile, typesFile]);
+
+  const handleSearchSelect = (itemName) => {
+    const findPath = (nodes, path = []) => {
+      for (let node of nodes) {
+        const currentPath = [...path, node];
+        if (node.name === itemName) {
+          return currentPath;
+        }
+        if (node.children && node.children.length > 0) {
+          const result = findPath(node.children, currentPath);
+          if (result) return result;
+        }
+      }
+      return null;
+    };
+
+    const pathToItem = findPath(treeData);
+    if (pathToItem) {
+      const expandedIds = pathToItem.map(node => node.marketGroupID || node.itemID);
+      setExpandedNodes(expandedIds);
+    }
+  };
 
   // Function for loading CSV files
   const loadCSV = (file) => {
@@ -218,10 +288,10 @@ const Sidebar = ({ marketGroupsFile, typesFile, onSelect }) => {
       <div className="resize-handle" onMouseDown={handleMouseDown} />
 
       <div className="sidebar-content">
-        <SearchBar txtFile={"/type_names.txt"} />
+        <SearchBar txtFile={"/type_names.txt"} onSelect={handleSearchSelect} />
         {treeData.length > 0 ? (
           treeData.map((node, index) => (
-            <TreeNode key={index} node={node} onSelect={onSelect} />
+            <TreeNode key={index} node={node} onSelect={onSelect} expandedNodes={expandedNodes} />
           ))
         ) : (
           <p className="login-label">Loading data...</p>

@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
+import './ItemInfoBox.css';
 
 const ItemInfoBox = ({ itemId }) => {
   const [itemDetails, setItemDetails] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showDescription, setShowDescription] = useState(false);
 
   useEffect(() => {
     if (!itemId) return;
@@ -32,7 +34,6 @@ const ItemInfoBox = ({ itemId }) => {
     fetchItemDetails();
   }, [itemId]);
 
-  // Function for parsing the description
   const parseDescription = (description) => {
     if (!description) return '';
     return description.replace(/<a href=showinfo:(\d+)>(.*?)<\/a>/g, (match, id, text) => {
@@ -42,16 +43,39 @@ const ItemInfoBox = ({ itemId }) => {
 
   return (
     <div className="item-info-box">
-      <h2>Item Info</h2>
       {loading && <p>Loading item details...</p>}
       {error && <p style={{ color: 'red' }}>Error: {error}</p>}
       {!loading && !error && itemDetails && (
         <>
           <h3>{itemDetails.name}</h3>
-          <div
-            className="item-description"
-            dangerouslySetInnerHTML={{ __html: parseDescription(itemDetails.description) }}
-          />
+          <div className="item-icon-and-description">
+            <div className="item-icon-container">
+              <img
+                src={`./src/assets/icons/${itemId}_32.webp`}
+                alt={itemDetails.name}
+                className="item-icon"
+              />
+            </div>
+            <img
+              src="./src/assets/main_icons/info_icon.png"
+              alt="Info icon"
+              className="info-icon"
+              onClick={() => setShowDescription(!showDescription)}
+            />
+          </div>
+          {showDescription && (
+            <div className="description-container">
+              <div
+                className="item-description-popup"
+              >
+                <div
+                  className="item-description"
+                  dangerouslySetInnerHTML={{ __html: parseDescription(itemDetails.description) }}
+                />
+                <button onClick={() => setShowDescription(false)}>Close</button>
+              </div>
+            </div>
+          )}
         </>
       )}
       {!loading && !error && !itemDetails && <p>Select an item to view details.</p>}

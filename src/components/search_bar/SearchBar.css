@@ -1,66 +1,105 @@
-/* Kontener wyszukiwarki */
+/* Container for the search bar */
 .search-bar-container {
     position: relative;
-    width: 100%; /* Dostosowuje się do szerokości rodzica */
-    max-width: 400px; /* Maksymalna szerokość */
-    margin: 0 0 20px 0; /* Margines od dołu, brak wyśrodkowania */
+    width: 100%;
+    max-width: 400px;
+    margin: 0 0 20px 0;
     padding: 0;
+    display: flex;
+    align-items: center;
 }
 
-/* Pole wyszukiwania */
+/* Search bar input */
 .search-bar-placeholder {
-    width: 100%;
+    flex: 1;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 1rem;
     box-sizing: border-box;
-    outline: none; /* Usuwa niebieską obwódkę */
+    outline: none;
     transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    margin: 0 10px;
 }
 
-/* Efekt focus bez niebieskiej ramki */
+/* Focus effect without blue border */
 .search-bar-placeholder:focus {
-    border-color: #888; /* Neutralny kolor przy focus */
-    box-shadow: 0 0 5px rgba(136, 136, 136, 0.5); /* Subtelny cień */
+    border-color: #888;
+    box-shadow: 0 0 5px rgba(136, 136, 136, 0.5);
 }
 
-/* Lista podpowiedzi */
+/* Suggestions list */
 .suggestions-list {
     list-style: none;
     margin: 0;
     padding: 0;
     border: 1px solid #ccc;
     border-top: none;
-    border-radius: 0 0 5px 5px;
-    max-height: 150px;
+    border-radius: 0 0 8px 8px; 
+    max-height: 250px;
     overflow-y: auto;
-    background-color: white;
+    background-color: #f9f9f9;
     position: absolute;
-    width: 100%;
+    top: 100%;
+    left: 34px; 
+    box-sizing: border-box; 
     z-index: 1000;
-    box-sizing: border-box;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Delikatny cień dla listy */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
 }
 
-/* Elementy listy */
+/* List items */
 .suggestions-list li {
-    padding: 8px;
+    padding: 10px 12px;
     cursor: pointer;
+    color: #333;
+    font-size: 1rem;
     transition: background-color 0.2s ease, color 0.2s ease;
+    border-bottom: 1px solid #e0e0e0;
 }
 
-/* Podświetlenie aktywnego elementu */
+/* Last item without border */
+.suggestions-list li:last-child {
+    border-bottom: none;
+}
+
+/* Highlighted list item */
 .suggestions-list li:hover,
 .suggestions-list li.highlighted {
     background-color: #4A90E2;
     color: white;
 }
 
-/* Responsywność */
+/* Scrollbar styling for the suggestions list */
+.suggestions-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.suggestions-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 8px;
+}
+
+.suggestions-list::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 8px;
+}
+
+.suggestions-list::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+/* Icons */
+.search-icon, .filter-icon, .settings-icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+/* Responsive adjustments */
 @media (max-width: 600px) {
     .search-bar-container {
-        max-width: 90%; /* Dopasowanie do mniejszych ekranów */
+        max-width: 90%;
     }
 
     .search-bar-placeholder {

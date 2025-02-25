@@ -3,7 +3,7 @@ import debounce from 'lodash.debounce';
 import Fuse from 'fuse.js';
 import './SearchBar.css';
 
-const SearchBar = ({ txtFile }) => {
+const SearchBar = ({ txtFile, onSelect }) => {
   const [data, setData] = useState([]);
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
@@ -11,6 +11,7 @@ const SearchBar = ({ txtFile }) => {
   const [fuseInstance, setFuseInstance] = useState(null);
 
   const suggestionsRef = useRef(null);
+  const inputRef = useRef(null); 
   const itemRefs = useRef([]);
 
   // Load data from TXT and initialize Fuse
@@ -47,6 +48,14 @@ const SearchBar = ({ txtFile }) => {
       debouncedSearch.cancel();
     };
   }, [debouncedSearch]);
+
+  // Ustaw szerokość listy sugestii na podstawie inputa
+  useEffect(() => {
+    if (suggestionsRef.current && inputRef.current) {
+      const inputWidth = inputRef.current.offsetWidth;
+      suggestionsRef.current.style.width = `${inputWidth}px`;
+    }
+  }, [suggestions]);
 
   // Handle changes in the search field
   const handleChange = (e) => {
@@ -96,18 +105,25 @@ const SearchBar = ({ txtFile }) => {
     setQuery(item);
     setSuggestions([]);
     setHighlightedIndex(-1);
+    if (onSelect) {
+      onSelect(item);
+    }
   };
 
   return (
     <div className="search-bar-container">
+      <img src="./src/assets/main_icons/search_icon.png" alt="Search icon" className="search-icon" />
       <input
+        ref={inputRef}
         type="text"
         className="search-bar-placeholder"
-        placeholder="Type for search..."
         value={query}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
+        placeholder="Type for search..."
       />
+      <img src="./src/assets/main_icons/filter_icon.png" alt="Filter icon" className="filter-icon" />
+      <img src="./src/assets/main_icons/settings_icon.png" alt="Settings icon" className="settings-icon" />
       {suggestions.length > 0 && (
         <ul className="suggestions-list" ref={suggestionsRef}>
           {suggestions.map((item, index) => (

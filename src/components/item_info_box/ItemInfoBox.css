@@ -1,3 +1,4 @@
+/* Main container for item info box */
 .item-info-box {
     background-color: #1a1a1a;
     padding: 15px;
@@ -7,16 +8,118 @@
     min-height: 150px;
 }
 
+/* Container for item icon */
+.item-icon-container {
+    display: inline-block;
+    border: 3px solid #C3D91E; 
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7); 
+    background-color: #2a2a2a;
+    padding: 6px; 
+    margin-bottom: 10px; 
+    margin-right: 10px; /* Add margin to the right */
+}
+
+/* Style for item icon */
+.item-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 4px;
+    display: block;
+}
+
+/* Style for item name */
 .item-info-box h3 {
     margin-top: 0;
     color: #fff;
+    font-size: 1.5em;
 }
 
+/* Style for links in item description */
 .item-description a {
     color: #4da6ff;
     text-decoration: none;
 }
 
+/* Style for links on hover */
 .item-description a:hover {
     text-decoration: underline;
 }
+
+/* Style for info icon */
+.info-icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer; 
+    transition: transform 0.2s ease, filter 0.2s ease; 
+    margin-left: 10px; 
+    margin-bottom: 10px;
+}
+
+/* Style for info icon on hover */
+.info-icon:hover {
+    transform: scale(1.2);
+    filter: brightness(1.2);
+}
+
+/* Style for active info icon */
+.info-icon.active {
+    filter: invert(50%) sepia(100%) saturate(500%) hue-rotate(180deg); 
+}
+
+/* Style for item description popup */
+.item-description-popup {
+    background-color: #2a2a2a;
+    padding: 15px;
+    border: 1px solid #333;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+    display: inline-block; /* Dostosowuje szerokość do tekstu */
+    max-width: 600px; /* Zwiększona maksymalna szerokość */
+    word-wrap: break-word; /* Zawijanie długich słów */
+    margin-top: 10px; /* Odstęp od ikony */
+    text-align: left; /* Wyrównanie tekstu do lewej */
+}
+
+/* Style for item description */
+.item-description {
+    color: white;
+    font-size: 0.9rem;
+    text-align: left; /* Tekst opisu wyrównany do lewej */
+}
+
+/* Style for close button */
+.item-description-popup button {
+    background-color: #C3D91E;
+    color: #1a1a1a;
+    border: none;
+    padding: 4px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    margin-top: 10px;
+    display: inline-block;
+    text-align: left; /* Przycisk wyrównany do lewej */
+}
+
+/* Style for close button on hover */
+.item-description-popup button:hover {
+    background-color: #aabb22;
+    color: #000;
+}
+
+/* Container for icon and description */
+.item-icon-and-description {
+    display: flex;
+    align-items: flex-start; /* Align items to the start */
+}
+
+/* Container for description */
+.description-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align items to the start */
+}
+
+
