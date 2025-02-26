@@ -3,7 +3,7 @@ import debounce from 'lodash.debounce';
 import Fuse from 'fuse.js';
 import './SearchBar.css';
 
-const SearchBar = ({ txtFile, onSelect, onSettingsClick }) => {
+const SearchBar = ({ txtFile, onSelect, onSettingsClick, onFiltersClick }) => {
   const [data, setData] = useState([]);
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
@@ -123,7 +123,22 @@ const SearchBar = ({ txtFile, onSelect, onSettingsClick }) => {
         onKeyDown={handleKeyDown}
         placeholder="Type for search..."
       />
-      <img src="/assets/main_icons/filter_icon.png" alt="Filter icon" className="filter-icon" />
+      <div className="filter-icon-container">
+        <img 
+          src="/assets/main_icons/filter_icon.png" 
+          alt="Filter icon" 
+          className="filter-icon" 
+          onClick={onFiltersClick}
+        />
+        <img 
+          src="/assets/main_icons/drop_icon.png" 
+          alt="Water Drop" 
+          className="water-drop" 
+          onClick={onFiltersClick}/>
+        <div className="water-drop"></div>
+      </div>
+
+      
       <img
         src="/assets/main_icons/settings_icon.png"
         alt="Settings icon"

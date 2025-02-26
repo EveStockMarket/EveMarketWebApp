@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import Papa from "papaparse";
 import SearchBar from "../search_bar/SearchBar";
-import SidebarSettings from "./sidebarsettings/sidebarsettings";
+import SidebarSettings from "./sidebarsettings/SidebarSettings.jsx";
+import SidebarFilters from "./filtersbar/SidebarFilters.jsx";
 import './Sidebar.css';
 
 function LazyImage({ src, alt, className, fallbackSrc }) {
@@ -121,8 +122,9 @@ const TreeNode = ({ node, onSelect, expandedNodes }) => {
 const Sidebar = ({ marketGroupsFile, typesFile, onSelect }) => {
   const [treeData, setTreeData] = useState([]);
   const [sidebarWidth, setSidebarWidth] = useState(360);
-  const [expandedNodes, setExpandedNodes] = useState([]); // New state to track expanded nodes
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false); // State for SidebarSettings
+  const [expandedNodes, setExpandedNodes] = useState([]); 
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
   const MIN_SIDEBAR_WIDTH = 280;
   const MAX_SIDEBAR_WIDTH = 500;
@@ -288,13 +290,17 @@ const Sidebar = ({ marketGroupsFile, typesFile, onSelect }) => {
     setIsSettingsOpen(!isSettingsOpen);
   };
 
+  const toggleFilters = () => {
+    setIsFiltersOpen(!isFiltersOpen);
+  };
+
   // Rendering the tree structure
   return (
     <div className="sidebar" style={{ width: sidebarWidth }}>
       <div className="resize-handle" onMouseDown={handleMouseDown} />
 
       <div className="sidebar-content">
-        <SearchBar txtFile={"/type_names.txt"} onSelect={handleSearchSelect} onSettingsClick={toggleSettings} />
+        <SearchBar txtFile={"/type_names.txt"} onSelect={handleSearchSelect} onSettingsClick={toggleSettings} onFiltersClick={toggleFilters} />
         {treeData.length > 0 ? (
           treeData.map((node, index) => (
             <TreeNode key={index} node={node} onSelect={onSelect} expandedNodes={expandedNodes} />
@@ -304,6 +310,7 @@ const Sidebar = ({ marketGroupsFile, typesFile, onSelect }) => {
         )}
 
         <SidebarSettings isOpen={isSettingsOpen} onClose={toggleSettings} />
+        <SidebarFilters isOpen={isFiltersOpen} onClose={toggleFilters}/>
       </div>
       
     </div>

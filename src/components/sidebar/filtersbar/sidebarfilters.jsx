@@ -1,13 +1,12 @@
-import './sidebarfilters.css';
+import './SidebarFilters.css';
 
-const SidebarSettings = ({ isOpen, onClose }) => {
+const SidebarFilters = ({ isOpen, onClose }) => {
   return (
-    <div className={`sidebar-settings ${isOpen ? 'open' : ''}`}>
+    <div className={`sidebar-filters ${isOpen ? 'open' : ''}`}>
       <button className="close-button" onClick={onClose}>Close</button>
-      <h2>Settings</h2>
-      {/* Add your settings content here */}
+      <h2>Filters</h2>
     </div>
   );
 };
 
-export default SidebarSettings;
+export default SidebarFilters;

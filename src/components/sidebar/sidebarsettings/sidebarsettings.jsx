@@ -1,4 +1,4 @@
-import './sidebarsettings.css';
+import './SidebarSettings.css';
 
 const SidebarSettings = ({ isOpen, onClose }) => {
   return (

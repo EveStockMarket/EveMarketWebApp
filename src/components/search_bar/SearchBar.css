@@ -1,24 +1,27 @@
-/* Container for the search bar */
 .search-bar-container {
     position: relative;
-    width: 100%;
-    max-width: 400px;
-    margin: 0 0 20px 0;
-    padding: 0;
     display: flex;
     align-items: center;
+    width: 100%;
+    max-width: 400px;
+    min-width: 50px; 
+    margin: 0 0 20px 0;
+    padding: 0;
+    transition: width 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    flex-grow: 1; 
+    overflow: hidden; 
 }
 
-/* Search bar input */
 .search-bar-placeholder {
     flex: 1;
+    min-width: 20px; 
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 1rem;
     box-sizing: border-box;
     outline: none;
-    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    transition: width 0.3s ease-in-out, opacity 0.3s ease-in-out;
     margin: 0 10px;
 }
 
@@ -90,21 +93,73 @@
 }
 
 /* Icons */
-.search-icon{
+.search-icon {
     width: 24px;
     height: 24px;
     cursor: pointer;
     padding: 5px;
 }
 
-.filter-icon{
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-    padding: 5px;
+/* Container for the filter icon */
+.filter-icon-container {
+    position: relative;
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    overflow: visible;
+    flex-shrink: 0; 
 }
 
-/* Dodanie efektu obracania */
+/* Filter icon */
+.filter-icon {
+    width: 24px; 
+    height: 24px; 
+    cursor: pointer;
+    object-fit: contain; 
+}
+
+/* Water drop (hidden by default) */
+.water-drop {
+    position: absolute;
+    top: -20px; 
+    left: 50%;
+    width: 12px;  
+    height: auto;
+    cursor: pointer; 
+    transform: translateX(-50%);
+    opacity: 0;
+}
+
+/* Activate animation on hover */
+.filter-icon-container:hover .water-drop {
+    animation: dropAnimation 1.5s ease-in-out;
+}
+
+/* Drop animation */
+@keyframes dropAnimation {
+    0% {
+        top: -20px;
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+    }
+    50% {
+        top: 50%;
+        opacity: 1;
+    }
+    80% {
+        opacity: 0;
+    }
+    100% {
+        top: 100%;
+        opacity: 0;
+    }
+}
+
+/* Adding rotation effect */
 .settings-icon {
     width: 24px;
     height: 24px;
@@ -113,20 +168,7 @@
     transition: transform 0.3s ease; 
 }
 
-/* Obrót przy najechaniu */
+/* Rotate on hover */
 .settings-icon:hover {
     transform: rotate(180deg);
-}
-
-
-/* Responsive adjustments */
-@media (max-width: 600px) {
-    .search-bar-container {
-        max-width: 90%;
-    }
-
-    .search-bar-placeholder {
-        font-size: 0.9rem;
-        padding: 6px;
-    }
 }
