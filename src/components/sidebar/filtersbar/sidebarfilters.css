@@ -1,0 +1,40 @@
+/* Container for the sidebar settings */
+.sidebar-settings {
+    position: absolute; 
+    top: 0;
+    left: -300px; 
+    width: 300px;
+    height: 100%; 
+    background-color: #2a2a2a;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+    transition: left 0.3s ease;
+    z-index: 1001; 
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Open state for the sidebar settings */
+.sidebar-settings.open {
+    left: 0;
+}
+
+/* Close button */
+.close-button {
+    background-color: #C3D91E; 
+    color: #1a1a1a;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+/* Close button hover */
+.close-button:hover {
+    background-color: #aabb22;
+    color: #000;
+}

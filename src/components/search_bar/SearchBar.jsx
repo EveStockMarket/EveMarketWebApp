@@ -24,6 +24,7 @@ const SearchBar = ({ txtFile, onSelect, onSettingsClick }) => {
         const fuse = new Fuse(lines, {
           threshold: 0.3,
           includeScore: true,
+          useExtendedSearch: false, 
         });
         setFuseInstance(fuse);
       })
