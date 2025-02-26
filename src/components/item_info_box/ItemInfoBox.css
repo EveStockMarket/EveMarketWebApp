@@ -6,18 +6,42 @@
     margin-bottom: 10px;
     color: white;
     min-height: 150px;
+    display: flex;
+    gap: 20px;
+}
+
+/* Left and right panels */
+.item-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Container for icon and description */
+.item-icon-and-description {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px; /* Space between icon/info and description */
+}
+
+/* Container for icon and info icon */
+.icon-info-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
 
 /* Container for item icon */
 .item-icon-container {
-    display: inline-block;
-    border: 3px solid #C3D91E; 
+    border: 3px solid #C3D91E;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7); 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
     background-color: #2a2a2a;
-    padding: 6px; 
-    margin-bottom: 10px; 
-    margin-right: 10px; /* Add margin to the right */
+    padding: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Style for item icon */
@@ -28,67 +52,47 @@
     display: block;
 }
 
-/* Style for item name */
-.item-info-box h3 {
-    margin-top: 0;
-    color: #fff;
-    font-size: 1.5em;
-}
-
-/* Style for links in item description */
-.item-description a {
-    color: #4da6ff;
-    text-decoration: none;
-}
-
-/* Style for links on hover */
-.item-description a:hover {
-    text-decoration: underline;
-}
-
 /* Style for info icon */
 .info-icon {
-    width: 20px;
-    height: 20px;
-    cursor: pointer; 
-    transition: transform 0.2s ease, filter 0.2s ease; 
-    margin-left: 10px; 
-    margin-bottom: 10px;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    margin-left: 100%;
+    margin-right: 20px;
+    transition: transform 0.2s ease, filter 0.2s ease;
 }
 
-/* Style for info icon on hover */
+/* Info icon hover */
 .info-icon:hover {
     transform: scale(1.2);
     filter: brightness(1.2);
 }
 
-/* Style for active info icon */
-.info-icon.active {
-    filter: invert(50%) sepia(100%) saturate(500%) hue-rotate(180deg); 
+/* Description container */
+.description-container {
+    flex: 1;
 }
 
-/* Style for item description popup */
+/* Description popup */
 .item-description-popup {
     background-color: #2a2a2a;
     padding: 15px;
     border: 1px solid #333;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
-    display: inline-block; /* Dostosowuje szerokość do tekstu */
-    max-width: 600px; /* Zwiększona maksymalna szerokość */
-    word-wrap: break-word; /* Zawijanie długich słów */
-    margin-top: 10px; /* Odstęp od ikony */
-    text-align: left; /* Wyrównanie tekstu do lewej */
+    max-width: 600px;
+    word-wrap: break-word;
+    text-align: left;
 }
 
 /* Style for item description */
 .item-description {
     color: white;
     font-size: 0.9rem;
-    text-align: left; /* Tekst opisu wyrównany do lewej */
+    text-align: left;
 }
 
-/* Style for close button */
+/* Close button */
 .item-description-popup button {
     background-color: #C3D91E;
     color: #1a1a1a;
@@ -99,27 +103,26 @@
     font-size: 0.8rem;
     transition: background-color 0.2s ease, color 0.2s ease;
     margin-top: 10px;
-    display: inline-block;
-    text-align: left; /* Przycisk wyrównany do lewej */
 }
 
-/* Style for close button on hover */
+/* Close button hover */
 .item-description-popup button:hover {
     background-color: #aabb22;
     color: #000;
 }
 
+
 /* Container for icon and description */
 .item-icon-and-description {
     display: flex;
-    align-items: flex-start; /* Align items to the start */
+    align-items: flex-start;
 }
 
 /* Container for description */
 .description-container {
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Align items to the start */
+    align-items: flex-start; 
 }
 
 

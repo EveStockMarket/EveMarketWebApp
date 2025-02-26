@@ -90,11 +90,34 @@
 }
 
 /* Icons */
-.search-icon, .filter-icon, .settings-icon {
+.search-icon{
     width: 24px;
     height: 24px;
     cursor: pointer;
+    padding: 5px;
 }
+
+.filter-icon{
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+/* Dodanie efektu obracania */
+.settings-icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    padding: 5px;
+    transition: transform 0.3s ease; 
+}
+
+/* Obrót przy najechaniu */
+.settings-icon:hover {
+    transform: rotate(180deg);
+}
+
 
 /* Responsive adjustments */
 @media (max-width: 600px) {

@@ -1,0 +1,62 @@
+/* Main container */
+.item-market-data {
+    flex: 1;
+    background-color: #2a2a2a; 
+    border: 1px solid #333;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: space-between; 
+    align-items: flex-start;
+    color: white;
+    gap: 10px;
+    height: 100%;
+}
+
+/* Column containers */
+.avg-sell-buy-margin,
+.vol-sell-buy,
+.med-sell-buy {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding-top: 15px;
+    box-sizing: border-box;
+}
+
+.avg-sell-buy {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.avg-margin {
+    position: relative; 
+    padding-top: 10px; 
+}
+
+.avg-margin::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(100% - 10px); 
+    height: 1px; 
+    background-color: #444;
+    margin-top: 5px; 
+    margin-left: 10px; 
+}
+
+/* Headings styling */
+h4, h5 {
+    margin: 0;
+    padding: 5px 0;
+    font-size: 1rem;
+}
+
+/* Reduce vertical gaps */
+.item-market-data h4, 
+.item-market-data h5 {
+    margin: 2px 0;
+    text-align: center;
+}

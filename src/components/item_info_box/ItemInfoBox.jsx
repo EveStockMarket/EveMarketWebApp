@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './ItemInfoBox.css';
+import ItemMarketData from './ItemMarketData';
 
 const ItemInfoBox = ({ itemId }) => {
   const [itemDetails, setItemDetails] = useState(null);
@@ -43,44 +44,51 @@ const ItemInfoBox = ({ itemId }) => {
 
   return (
     <div className="item-info-box">
-      {loading && <p>Loading item details...</p>}
-      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
-      {!loading && !error && itemDetails && (
-        <>
-          <h3>{itemDetails.name}</h3>
-          <div className="item-icon-and-description">
-            <div className="item-icon-container">
-              <img
-                src={`/assets/icons/${itemId}_32.webp`}
-                alt={itemDetails.name}
-                className="item-icon"
-              />
-            </div>
-            <img
-              src="/assets/main_icons/info_icon.png"
-              alt="Info icon"
-              className="info-icon"
-              onClick={() => setShowDescription(!showDescription)}
-            />
-          </div>
-          {showDescription && (
-            <div className="description-container">
-              <div
-                className="item-description-popup"
-              >
-                <div
-                  className="item-description"
-                  dangerouslySetInnerHTML={{ __html: parseDescription(itemDetails.description) }}
+      <div className="item-details">
+        {loading && <p>Loading item details...</p>}
+        {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+        {!loading && !error && itemDetails && (
+          <>
+            <h3>{itemDetails.name}</h3>
+            <div className="item-icon-and-description">
+              {/* Lewa sekcja z ikoną i przyciskiem info */}
+              <div className="icon-info-container">
+                <div className="item-icon-container">
+                  <img
+                    src={`/assets/icons/${itemId}_32.webp`}
+                    alt={itemDetails.name}
+                    className="item-icon"
+                  />
+                </div>
+                <img
+                  src="/assets/main_icons/info_icon.png"
+                  alt="Info icon"
+                  className="info-icon"
+                  onClick={() => setShowDescription(!showDescription)}
                 />
-                <button onClick={() => setShowDescription(false)}>Close</button>
               </div>
+  
+              {/* Prawa sekcja z opisem */}
+              {showDescription && (
+                <div className="description-container">
+                  <div className="item-description-popup">
+                    <div
+                      className="item-description"
+                      dangerouslySetInnerHTML={{ __html: parseDescription(itemDetails.description) }}
+                    />
+                    <button onClick={() => setShowDescription(false)}>Close</button>
+                  </div>
+                </div>
+              )}
             </div>
-          )}
-        </>
-      )}
-      {!loading && !error && !itemDetails && <p>Select an item to view details.</p>}
+          </>
+        )}
+        {!loading && !error && !itemDetails && <p>Select an item to view details.</p>}
+      </div>
+      <ItemMarketData itemId={itemId} />
     </div>
   );
+  
 };
 
 export default ItemInfoBox;
