@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import Papa from "papaparse";
 import SearchBar from "../search_bar/SearchBar";
+import SidebarSettings from "./sidebarsettings/sidebarsettings";
 import './Sidebar.css';
 
 function LazyImage({ src, alt, className, fallbackSrc }) {
@@ -121,6 +122,7 @@ const Sidebar = ({ marketGroupsFile, typesFile, onSelect }) => {
   const [treeData, setTreeData] = useState([]);
   const [sidebarWidth, setSidebarWidth] = useState(360);
   const [expandedNodes, setExpandedNodes] = useState([]); // New state to track expanded nodes
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false); // State for SidebarSettings
 
   const MIN_SIDEBAR_WIDTH = 280;
   const MAX_SIDEBAR_WIDTH = 500;
@@ -282,13 +284,17 @@ const Sidebar = ({ marketGroupsFile, typesFile, onSelect }) => {
     document.addEventListener("mouseup", onMouseUp);
   };
 
+  const toggleSettings = () => {
+    setIsSettingsOpen(!isSettingsOpen);
+  };
+
   // Rendering the tree structure
   return (
     <div className="sidebar" style={{ width: sidebarWidth }}>
       <div className="resize-handle" onMouseDown={handleMouseDown} />
 
       <div className="sidebar-content">
-        <SearchBar txtFile={"/type_names.txt"} onSelect={handleSearchSelect} />
+        <SearchBar txtFile={"/type_names.txt"} onSelect={handleSearchSelect} onSettingsClick={toggleSettings} />
         {treeData.length > 0 ? (
           treeData.map((node, index) => (
             <TreeNode key={index} node={node} onSelect={onSelect} expandedNodes={expandedNodes} />
@@ -296,7 +302,10 @@ const Sidebar = ({ marketGroupsFile, typesFile, onSelect }) => {
         ) : (
           <p className="login-label">Loading data...</p>
         )}
+
+        <SidebarSettings isOpen={isSettingsOpen} onClose={toggleSettings} />
       </div>
+      
     </div>
   );
 };

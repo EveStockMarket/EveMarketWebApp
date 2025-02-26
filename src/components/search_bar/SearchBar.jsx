@@ -3,7 +3,7 @@ import debounce from 'lodash.debounce';
 import Fuse from 'fuse.js';
 import './SearchBar.css';
 
-const SearchBar = ({ txtFile, onSelect }) => {
+const SearchBar = ({ txtFile, onSelect, onSettingsClick }) => {
   const [data, setData] = useState([]);
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
@@ -49,7 +49,7 @@ const SearchBar = ({ txtFile, onSelect }) => {
     };
   }, [debouncedSearch]);
 
-  // Ustaw szerokość listy sugestii na podstawie inputa
+  // Set the width of the suggestions list based on the input
   useEffect(() => {
     if (suggestionsRef.current && inputRef.current) {
       const inputWidth = inputRef.current.offsetWidth;
@@ -123,7 +123,12 @@ const SearchBar = ({ txtFile, onSelect }) => {
         placeholder="Type for search..."
       />
       <img src="/assets/main_icons/filter_icon.png" alt="Filter icon" className="filter-icon" />
-      <img src="/assets/main_icons/settings_icon.png" alt="Settings icon" className="settings-icon" />
+      <img
+        src="/assets/main_icons/settings_icon.png"
+        alt="Settings icon"
+        className="settings-icon"
+        onClick={onSettingsClick}
+      />
       {suggestions.length > 0 && (
         <ul className="suggestions-list" ref={suggestionsRef}>
           {suggestions.map((item, index) => (
