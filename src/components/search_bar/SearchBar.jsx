@@ -117,12 +117,15 @@ const SearchBar = ({ txtFile, onSelect, onSettingsClick, onFiltersClick }) => {
       <input
         ref={inputRef}
         type="text"
+        id="searchInput"  // Dodane id
+        name="searchQuery" // Dodane name
         className="search-bar-placeholder"
         value={query}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         placeholder="Type for search..."
       />
+
       <div className="filter-icon-container">
         <img 
           src="/assets/main_icons/filter_icon.png" 
