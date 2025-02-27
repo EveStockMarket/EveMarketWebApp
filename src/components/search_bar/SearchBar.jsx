@@ -31,11 +31,27 @@ const SearchBar = ({ txtFile, onSelect, onSettingsClick, onFiltersClick }) => {
       .catch(error => console.error('TXT Load Error:', error));
   }, [txtFile]);
 
+  //Hiding list of suggestions when clicked outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (inputRef.current && !inputRef.current.contains(event.target)) {
+        setSuggestions([]);
+      }
+    };
+  
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [inputRef]);
+
   // Debounced search handler with cleanup
   const debouncedSearch = useCallback(
     debounce((value) => {
+      console.log('Fuse instance:', fuseInstance);
       if (fuseInstance) {
         const results = fuseInstance.search(value);
+        console.log('Search results:', results);
         const filtered = results.map(result => result.item).slice(0, 10);
         setSuggestions(filtered);
         setHighlightedIndex(-1);
@@ -117,8 +133,8 @@ const SearchBar = ({ txtFile, onSelect, onSettingsClick, onFiltersClick }) => {
       <input
         ref={inputRef}
         type="text"
-        id="searchInput"  
-        name="searchQuery"
+        // id="searchInput"  
+        // name="searchQuery"
         className="search-bar-placeholder"
         value={query}
         onChange={handleChange}
@@ -148,22 +164,21 @@ const SearchBar = ({ txtFile, onSelect, onSettingsClick, onFiltersClick }) => {
         className="settings-icon"
         onClick={onSettingsClick}
       />
-      {suggestions.length > 0 && (
-        <ul className="suggestions-list" ref={suggestionsRef}>
-          {suggestions.map((item, index) => (
-            <li
-              key={item}
-              ref={(el) => {
-                if (el) itemRefs.current[index] = el;
-              }}
-              onClick={() => handleSelect(item)}
-              className={index === highlightedIndex ? 'highlighted' : ''}
-            >
-              {item}
-            </li>
-          ))}
-        </ul>
-      )}
+      {query.trim() !== '' && suggestions.length > 0 && (
+      <ul className="suggestions-list visible">
+        {suggestions.map((item, index) => (
+          <li
+            key={index}
+            onClick={() => handleSelect(item)}
+            className={index === highlightedIndex ? 'highlighted' : ''}
+          >
+            {item}
+          </li>
+        ))}
+      </ul>
+    )}
+
+
     </div>
   );
 };

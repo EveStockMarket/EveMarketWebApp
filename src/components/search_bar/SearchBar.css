@@ -4,17 +4,17 @@
     align-items: center;
     width: 100%;
     max-width: 400px;
-    min-width: 50px; 
+    min-width: 50px;
     margin: 0 0 20px 0;
     padding: 0;
     transition: width 0.3s ease-in-out, opacity 0.3s ease-in-out;
-    flex-grow: 1; 
-    overflow: hidden; 
+    flex-grow: 1;
+    overflow: visible; 
 }
 
 .search-bar-placeholder {
     flex: 1;
-    min-width: 20px; 
+    min-width: 20px;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -25,33 +25,39 @@
     margin: 0 10px;
 }
 
-/* Focus effect without blue border */
 .search-bar-placeholder:focus {
     border-color: #888;
     box-shadow: 0 0 5px rgba(136, 136, 136, 0.5);
 }
 
-/* Suggestions list */
 .suggestions-list {
     list-style: none;
     margin: 0;
     padding: 0;
     border: 1px solid #ccc;
     border-top: none;
-    border-radius: 0 0 8px 8px; 
+    border-radius: 0 0 8px 8px;
     max-height: 250px;
     overflow-y: auto;
     background-color: #f9f9f9;
     position: absolute;
-    top: 100%;
-    left: 34px; 
-    box-sizing: border-box; 
+    top: 100%; 
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
     z-index: 1000;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     transition: all 0.2s ease;
+    opacity: 0; 
+    visibility: hidden;
+    min-width: 200px;
 }
 
-/* List items */
+.suggestions-list.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
 .suggestions-list li {
     padding: 10px 12px;
     cursor: pointer;
@@ -61,19 +67,16 @@
     border-bottom: 1px solid #e0e0e0;
 }
 
-/* Last item without border */
 .suggestions-list li:last-child {
     border-bottom: none;
 }
 
-/* Highlighted list item */
 .suggestions-list li:hover,
 .suggestions-list li.highlighted {
     background-color: #4A90E2;
     color: white;
 }
 
-/* Scrollbar styling for the suggestions list */
 .suggestions-list::-webkit-scrollbar {
     width: 8px;
 }
@@ -92,7 +95,6 @@
     background-color: #555;
 }
 
-/* Icons */
 .search-icon {
     width: 24px;
     height: 24px;
@@ -100,75 +102,55 @@
     padding: 5px;
 }
 
-/* Container for the filter icon */
 .filter-icon-container {
     position: relative;
-    display: flex; 
+    display: flex;
     justify-content: center;
     align-items: center;
     width: 24px;
     height: 24px;
     overflow: visible;
-    flex-shrink: 0; 
+    flex-shrink: 0;
 }
 
-/* Filter icon */
 .filter-icon {
-    width: 24px; 
-    height: 24px; 
+    width: 24px;
+    height: 24px;
     cursor: pointer;
-    object-fit: contain; 
+    object-fit: contain;
 }
 
-/* Water drop (hidden by default) */
 .water-drop {
     position: absolute;
-    top: -20px; 
+    top: -20px;
     left: 50%;
-    width: 12px;  
+    width: 12px;
     height: auto;
-    cursor: pointer; 
+    cursor: pointer;
     transform: translateX(-50%);
     opacity: 0;
 }
 
-/* Activate animation on hover */
 .filter-icon-container:hover .water-drop {
     animation: dropAnimation 1.5s ease-in-out;
 }
 
-/* Drop animation */
 @keyframes dropAnimation {
-    0% {
-        top: -20px;
-        opacity: 0;
-    }
-    20% {
-        opacity: 1;
-    }
-    50% {
-        top: 50%;
-        opacity: 1;
-    }
-    80% {
-        opacity: 0;
-    }
-    100% {
-        top: 100%;
-        opacity: 0;
-    }
+    0% { top: -20px; opacity: 0; }
+    20% { opacity: 1; }
+    50% { top: 50%; opacity: 1; }
+    80% { opacity: 0; }
+    100% { top: 100%; opacity: 0; }
 }
 
-/* Adding rotation effect */
 .settings-icon {
     width: 24px;
     height: 24px;
     cursor: pointer;
     padding: 5px;
-    transition: transform 0.3s ease; 
+    transition: transform 0.3s ease;
 }
 
-/* Rotate on hover */
 .settings-icon:hover {
     transform: rotate(180deg);
 }
