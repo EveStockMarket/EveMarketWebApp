@@ -31,3 +31,6 @@ dist/
 .amplify
 amplify_outputs*
 amplifyconfiguration*
+
+amplify/
+.vite/
