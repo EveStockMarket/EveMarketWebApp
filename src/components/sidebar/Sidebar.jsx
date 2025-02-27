@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import Papa from "papaparse";
 import SearchBar from "../search_bar/SearchBar";
-import SidebarSettings from "./sidebarsettings/SidebarSettings.jsx";
-import SidebarFilters from "./filtersbar/SidebarFilters.jsx";
+import SidebarSettings from "./sidebarsettings/SidebarSettings";
+import SidebarFilters from "./filtersbar/SidebarFilters";
 import './Sidebar.css';
 
 function LazyImage({ src, alt, className, fallbackSrc }) {
