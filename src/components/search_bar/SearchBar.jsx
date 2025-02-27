@@ -117,8 +117,8 @@ const SearchBar = ({ txtFile, onSelect, onSettingsClick, onFiltersClick }) => {
       <input
         ref={inputRef}
         type="text"
-        id="searchInput"  // Dodane id
-        name="searchQuery" // Dodane name
+        id="searchInput"  
+        name="searchQuery"
         className="search-bar-placeholder"
         value={query}
         onChange={handleChange}
