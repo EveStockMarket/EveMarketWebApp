@@ -1,26 +1,24 @@
-/* Container for the sidebar settings */
 .sidebar-filters {
-    position: absolute; 
+    position: absolute;
     top: 0;
-    left: -100%; 
+    left: -100%;
     width: 100%;
-    height: 100%; 
+    height: 100%;
     background-color: #2a2a2a;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
     transition: left 0.3s ease;
-    z-index: 1001; 
+    z-index: 1001;
     padding: 20px;
     box-sizing: border-box;
 }
 
-/* Open state for the sidebar settings */
 .sidebar-filters.open {
     left: 0;
 }
 
-/* Close button */
 .close-button {
-    background-color: #C3D91E; 
+    background-color: #C3D91E;
+    font-family: 'Roboto Condensed', sans-serif;
     color: #1a1a1a;
     border: none;
     padding: 8px 12px;
@@ -35,8 +33,109 @@
     right: 10px;
 }
 
-/* Close button hover */
 .close-button:hover {
     background-color: #aabb22;
     color: #000;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 20px; 
+}
+
+label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.input-group {
+    display: flex;
+    gap: 10px;
+}
+
+.input-group input {
+    width: 50%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.security-filters {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-bottom: 0px; 
+    margin-bottom: 0px; 
+}
+
+.security-filters input {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid white;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    background-color: transparent;
+}
+
+.security-filters input:checked::before {
+    content: '✔';
+    font-size: 16px;
+    font-weight: bold;
+    position: absolute;
+    left: 2px;
+    top: -3px;
+}
+
+.null-sec input {
+    border-color: red;
+}
+
+.null-sec input:checked::before {
+    color: red;
+}
+
+.low-sec input {
+    border-color: orange;
+}
+
+.low-sec input:checked::before {
+    color: orange;
+}
+
+.high-sec input {
+    border-color: cyan;
+}
+
+.high-sec input:checked::before {
+    color: cyan;
+}
+
+.station-filters {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-top: 2px solid #444; 
+    padding-top: 10px;
+}
+
+.station-filters label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
 }

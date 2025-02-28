@@ -1,6 +1,7 @@
 /* Container for the sidebar settings */
 .sidebar-settings {
-    position: absolute; 
+    position: absolute;
+    font-family: 'Roboto Condensed', sans-serif; 
     top: 0;
     left: -100%; 
     width: 100%;
