@@ -27,7 +27,7 @@ async def get_icon_32(icon_id: int):
 
 @router.get("/icon_64/{icon_id}")
 async def get_icon_64(icon_id: int):
-    icon_path = icon_64_folder / f"{icon_id}_64.webp"
+    icon_path = icon_64_folder / f"{icon_id}.png"
     
     logging.info(f"Looking for icon at path: {icon_path}")
 

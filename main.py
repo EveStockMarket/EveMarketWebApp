@@ -5,16 +5,14 @@ from controllers.market_controller import router as market_router
 
 app = FastAPI()
 
-# 🔹 Dodajemy obsługę CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Możesz podać konkretny frontend, np. ["http://localhost:5173"]
+    allow_origins=["*"], 
     allow_credentials=True,
-    allow_methods=["*"],  # Zezwalamy na wszystkie metody (GET, POST, PUT, DELETE itd.)
-    allow_headers=["*"],  # Zezwalamy na wszystkie nagłówki
+    allow_methods=["*"],  
+    allow_headers=["*"],  
 )
 
-# 🔹 Dodajemy routery
 app.include_router(icon_router)
 app.include_router(market_router)
 
