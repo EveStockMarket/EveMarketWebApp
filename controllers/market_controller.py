@@ -1,0 +1,87 @@
+import pandas as pd
+import requests
+import json
+from fastapi import APIRouter, HTTPException
+from fastapi.responses import FileResponse
+from pathlib import Path
+import logging
+
+router = APIRouter()
+
+BASE_DIR = Path(__file__).resolve().parent.parent  
+
+logging.basicConfig(level=logging.INFO)
+
+items_df = pd.read_csv('./file_data/invTypes.csv')
+regions_df = pd.read_csv('./file_data/mapRegions.csv')
+locations_df = pd.read_csv('./file_data/staStations.csv')
+stations_df = pd.read_csv('./file_data/mapSolarSystems.csv')
+
+regions_dict = dict(zip(regions_df['regionID'], regions_df['regionName']))
+regions_id_list = regions_df['regionID'].tolist()
+locations_dict = dict(zip(locations_df['stationID'], locations_df['stationName']))
+stations_dict = dict(zip(stations_df['solarSystemID'], stations_df['solarSystemName']))
+items_base_volume = dict(zip(items_df['typeID'], items_df['volume']))
+
+
+def convert_location_id_to_name(location_id):
+    return locations_dict.get(location_id, f"Unknown Station {location_id}") 
+
+def convert_system_id_to_name(system_id):   
+    return stations_dict.get(system_id, f"Unknown System {system_id}")
+
+def check_item(type_id):
+    url = f"https://esi.evetech.net/latest/universe/types/{type_id}/"
+    response = requests.get(url)
+    return response.status_code == 200
+
+def fetch_market_data_all_regions(type_id):
+    market_data = []
+
+    item_id_base_volume = items_base_volume.get(type_id, None)
+
+    if item_id_base_volume is None:
+        print(f"⚠️ Item ID {type_id} not found in database.")
+        return []
+
+    for region_id in regions_id_list:
+        url = f"https://esi.evetech.net/latest/markets/{region_id}/orders/?type_id={type_id}"
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            data = response.json()
+            if data:
+                for order in data:
+                    order['region'] = regions_dict[region_id]
+                    order['quantity'] = order['volume_remain'] / item_id_base_volume
+                market_data.extend(data)
+        else:
+            print(f"❌ Error {response.status_code}: {response.text}")
+
+    for order in market_data:
+        order['location'] = convert_location_id_to_name(order['location_id'])
+        order['system'] = convert_system_id_to_name(order['system_id'])
+        del order['location_id']
+        del order['system_id']
+        del order['range']
+        del order['order_id']
+        del order['type_id']
+        del order['volume_total']
+
+    output_path = BASE_DIR / "generated_data" / f"{type_id}_prices.json"
+    with open(output_path, "w", encoding="utf-8") as json_file:
+        json.dump(market_data, json_file, indent=4, ensure_ascii=False)
+
+    return market_data
+
+@router.get("/market_orders/{item_id}")
+async def get_market_data(item_id: int):
+    json_file = BASE_DIR / "generated_data" / f"{item_id}_prices.json"
+
+    if json_file.exists():
+        return FileResponse(str(json_file))
+    else:
+        market_data = fetch_market_data_all_regions(item_id)
+        if not market_data:
+            raise HTTPException(status_code=404, detail="Item not found or no market data available")
+        return FileResponse(str(json_file))

@@ -5,10 +5,8 @@ import logging
 
 router = APIRouter()
 
-# Znalezienie katalogu głównego projektu (EVEStockMarketBackend)
-BASE_DIR = Path(__file__).resolve().parent.parent  # Przesunięcie o jeden katalog w górę
+BASE_DIR = Path(__file__).resolve().parent.parent  
 
-# Prawidłowe ścieżki do folderów z ikonami
 icon_32_folder = BASE_DIR / "icons_data" / "icons_32"
 icon_64_folder = BASE_DIR / "icons_data" / "icons_64"
 
@@ -28,7 +26,7 @@ async def get_icon_32(icon_id: int):
     raise HTTPException(status_code=404, detail="Icon not found")
 
 @router.get("/icon_64/{icon_id}")
-async def get_icon_32(icon_id: int):
+async def get_icon_64(icon_id: int):
     icon_path = icon_64_folder / f"{icon_id}_64.webp"
     
     logging.info(f"Looking for icon at path: {icon_path}")
