@@ -6,6 +6,7 @@ from fastapi.responses import FileResponse
 from pathlib import Path
 import logging
 from datetime import datetime, timedelta
+from datetime import UTC
 
 router = APIRouter()
 
@@ -39,7 +40,7 @@ def check_item(type_id):
 def time_until_expiry(issued, duration):
     issued_dt = datetime.strptime(issued, "%Y-%m-%dT%H:%M:%SZ")
     expiry_dt = issued_dt + timedelta(days=duration)
-    now = datetime.datetime.timezone.utc()
+    now = datetime.now(UTC)
     
     remaining_time = expiry_dt - now
     days = remaining_time.days
@@ -81,6 +82,7 @@ def fetch_market_data_all_regions(type_id):
         del order['range']
         del order['order_id']
         del order['type_id']
+        del order['volume_remain']
         del order['volume_total']
 
     output_path = BASE_DIR / "generated_data" / f"{type_id}_prices.json"
