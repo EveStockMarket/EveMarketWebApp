@@ -39,7 +39,7 @@ def check_item(type_id):
 def time_until_expiry(issued, duration):
     issued_dt = datetime.strptime(issued, "%Y-%m-%dT%H:%M:%SZ")
     expiry_dt = issued_dt + timedelta(days=duration)
-    now = datetime.utcnow()
+    now = datetime.datetime.timezone.utc()
     
     remaining_time = expiry_dt - now
     days = remaining_time.days
@@ -50,11 +50,11 @@ def time_until_expiry(issued, duration):
 def fetch_market_data_all_regions(type_id):
     market_data = []
 
-    item_id_base_volume = items_base_volume.get(type_id, None)
+    # item_id_base_volume = items_base_volume.get(type_id, None)
 
-    if item_id_base_volume is None:
-        print(f"⚠️ Item ID {type_id} not found in database.")
-        return []
+    # if item_id_base_volume is None:
+    #     print(f"⚠️ Item ID {type_id} not found in database.")
+    #     return []
 
     for region_id in regions_id_list:
         url = f"https://esi.evetech.net/latest/markets/{region_id}/orders/?type_id={type_id}"
@@ -65,7 +65,7 @@ def fetch_market_data_all_regions(type_id):
             if data:
                 for order in data:
                     order['region'] = regions_dict[region_id]
-                    order['quantity'] = order['volume_remain'] / item_id_base_volume
+                    order['quantity'] = order['volume_remain']
                 market_data.extend(data)
         else:
             print(f"❌ Error {response.status_code}: {response.text}")
