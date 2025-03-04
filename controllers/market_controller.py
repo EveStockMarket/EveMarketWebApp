@@ -5,8 +5,8 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
 from pathlib import Path
 import logging
-from datetime import datetime, timedelta
-from datetime import UTC
+from datetime import datetime, timedelta, UTC
+
 
 router = APIRouter()
 
@@ -38,7 +38,7 @@ def check_item(type_id):
     return response.status_code == 200
 
 def time_until_expiry(issued, duration):
-    issued_dt = datetime.strptime(issued, "%Y-%m-%dT%H:%M:%SZ")
+    issued_dt = datetime.strptime(issued, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=UTC)
     expiry_dt = issued_dt + timedelta(days=duration)
     now = datetime.now(UTC)
     
