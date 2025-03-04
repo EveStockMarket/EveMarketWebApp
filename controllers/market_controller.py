@@ -48,6 +48,31 @@ def time_until_expiry(issued, duration):
 
     return days, hours
 
+def analyze_market_data(market_data):
+    df = pd.DataFrame(market_data)
+    buy_orders = df[df['is_buy_order']]
+    sell_orders = df[~df['is_buy_order']]
+
+    avg_buy_price = buy_orders['price'].mean()
+    avg_sell_price = sell_orders['price'].mean()
+    avg_margin = avg_sell_price - avg_buy_price
+
+    avg_quantity = df['quantity'].mean()
+    avg_volume = df['quantity'].mean() 
+
+    median_buy_price = buy_orders['price'].median()
+    median_sell_price = sell_orders['price'].median()
+
+    return {
+        "avg_buy_price": avg_buy_price,
+        "avg_sell_price": avg_sell_price,
+        "avg_margin": avg_margin,
+        "avg_quantity": avg_quantity,
+        "avg_volume": avg_volume,
+        "median_buy_price": median_buy_price,
+        "median_sell_price": median_sell_price
+    }
+
 def fetch_market_data_all_regions(type_id):
     market_data = []
 
@@ -86,12 +111,14 @@ def fetch_market_data_all_regions(type_id):
         del order['volume_total']
 
     output_path = BASE_DIR / "generated_data" / f"{type_id}_prices.json"
+    output_path.parent.mkdir(parents=True, exist_ok=True)  
+    analysis = analyze_market_data(market_data)
+    result = {"orders": market_data, "analysis": analysis}
+
     with open(output_path, "w", encoding="utf-8") as json_file:
-        json.dump(market_data, json_file, indent=4, ensure_ascii=False)
+        json.dump(result, json_file, indent=4, ensure_ascii=False)
 
-    return market_data
-
-
+    return result
 
 @router.get("/market_orders/{item_id}")
 async def get_market_data(item_id: int):
@@ -104,3 +131,4 @@ async def get_market_data(item_id: int):
         if not market_data:
             raise HTTPException(status_code=404, detail="Item not found or no market data available")
         return FileResponse(str(json_file))
+
