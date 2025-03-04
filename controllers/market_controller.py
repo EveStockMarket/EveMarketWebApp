@@ -5,6 +5,7 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
 from pathlib import Path
 import logging
+from datetime import datetime, timedelta
 
 router = APIRouter()
 
@@ -35,6 +36,17 @@ def check_item(type_id):
     response = requests.get(url)
     return response.status_code == 200
 
+def time_until_expiry(issued, duration):
+    issued_dt = datetime.strptime(issued, "%Y-%m-%dT%H:%M:%SZ")
+    expiry_dt = issued_dt + timedelta(days=duration)
+    now = datetime.utcnow()
+    
+    remaining_time = expiry_dt - now
+    days = remaining_time.days
+    hours = remaining_time.seconds // 3600
+
+    return days, hours
+
 def fetch_market_data_all_regions(type_id):
     market_data = []
 
@@ -61,6 +73,9 @@ def fetch_market_data_all_regions(type_id):
     for order in market_data:
         order['location'] = convert_location_id_to_name(order['location_id'])
         order['system'] = convert_system_id_to_name(order['system_id'])
+        order['remaining_time'] = time_until_expiry(order['issued'], order['duration'])
+        del order['duration']
+        del order['issued']
         del order['location_id']
         del order['system_id']
         del order['range']
@@ -73,6 +88,8 @@ def fetch_market_data_all_regions(type_id):
         json.dump(market_data, json_file, indent=4, ensure_ascii=False)
 
     return market_data
+
+
 
 @router.get("/market_orders/{item_id}")
 async def get_market_data(item_id: int):
