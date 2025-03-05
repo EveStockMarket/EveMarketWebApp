@@ -17,10 +17,8 @@ function App() {
 
   return (
     <div className="app-container">
-      {/* Top menu bar */}
       <Menu />
 
-      {/* Main content */}
       <div className="content">
         <Sidebar
           marketGroupsFile="/invMarketGroups.csv"
@@ -29,7 +27,6 @@ function App() {
         />
 
         <div className="main-content">
-          {/* Display selected item data */}
           <ItemInfoBox itemId={selectedItemId} />
 
           <div className="market-data">
