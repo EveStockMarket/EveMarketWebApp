@@ -33,8 +33,12 @@ function App() {
           <ItemInfoBox itemId={selectedItemId} />
 
           <div className="market-data">
-            <SellersBox />
-            <BuyersBox />
+            <div className="sellers-box">
+              <SellersBox itemId={selectedItemId}/>
+            </div>
+            <div className="buyers-box">
+              <BuyersBox itemId={selectedItemId}/>
+            </div>
           </div>
         </div>
       </div>

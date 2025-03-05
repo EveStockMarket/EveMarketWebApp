@@ -17,6 +17,11 @@
     flex-direction: column;
 }
 
+.item-details a{
+    color: #C3D91E;
+    
+}
+
 /* Container for icon and description */
 .item-icon-and-description {
     display: flex;

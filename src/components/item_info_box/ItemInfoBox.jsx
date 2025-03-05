@@ -7,6 +7,7 @@ const ItemInfoBox = ({ itemId }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showDescription, setShowDescription] = useState(false);
+  const [analysis, setAnalysis] = useState(null);
 
   useEffect(() => {
     if (!itemId) return;
@@ -35,6 +36,19 @@ const ItemInfoBox = ({ itemId }) => {
     fetchItemDetails();
   }, [itemId]);
 
+  useEffect(() => {
+    if (!itemId) return;
+
+    fetch(`http://16.171.222.100:8000/market_orders/${itemId}`)
+      .then(response => response.json())
+      .then(data => {
+        setAnalysis(data.analysis);
+      })
+      .catch(error => {
+        console.error("Error fetching analysis data: ", error);
+      });
+  }, [itemId]);
+
   const parseDescription = (description) => {
     if (!description) return '';
     return description.replace(/<a href=showinfo:(\d+)>(.*?)<\/a>/g, (match, id, text) => {
@@ -54,7 +68,7 @@ const ItemInfoBox = ({ itemId }) => {
               <div className="icon-info-container">
                 <div className="item-icon-container">
                   <img
-                    src={`http://13.48.177.9:8000/icon_64/${itemId}`}
+                    src={`http://16.171.222.100:8000/icon_64/${itemId}`}
                     alt={itemDetails.name}
                     className="item-icon"
                   />
@@ -83,7 +97,7 @@ const ItemInfoBox = ({ itemId }) => {
         )}
         {!loading && !error && !itemDetails && <p>Select an item to view details.</p>}
       </div>
-      <ItemMarketData itemId={itemId} />
+      <ItemMarketData itemId={itemId} analysis={analysis} />
     </div>
   );
   

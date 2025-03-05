@@ -59,13 +59,13 @@ function DisplayIcon({ hasChildren, isOpen, node }) {
   };
 
   const getNodeIcon = () => {
-    const iconPath = node.iconId ? `http://13.48.177.9:8000/icon_32/${node.iconId}` : '/assets/icons/0_32.webp';
+    const iconPath = node.iconId ? `http://16.171.222.100:8000/icon_32/${node.iconId}` : '/assets/main_icons/0_32.webp';
     return (
       <LazyImage
         src={iconPath}
         alt={`${node.name} icon`}
         className="sidebar-icon"                                                             
-        fallbackSrc="/assets/icons/0_32.webp"
+        fallbackSrc="/assets/main_icons/0_32.webp"
       />
     );
   };
@@ -149,7 +149,7 @@ const Sidebar = ({ marketGroupsFile, typesFile, onSelect }) => {
     const findPath = (nodes, path = []) => {
       for (let node of nodes) {
         const currentPath = [...path, node];
-        if (node.name === itemName) {
+        if (node.name === itemName && node.itemID) {
           return currentPath;
         }
         if (node.children && node.children.length > 0) {
@@ -159,14 +159,20 @@ const Sidebar = ({ marketGroupsFile, typesFile, onSelect }) => {
       }
       return null;
     };
-
+  
     const pathToItem = findPath(treeData);
     if (pathToItem) {
       const expandedIds = pathToItem.map(node => node.marketGroupID || node.itemID);
       setExpandedNodes(expandedIds);
+  
+      const itemID = pathToItem[pathToItem.length - 1]?.itemID;
+      if (itemID) {
+        console.log("Found itemID:", itemID);
+        onSelect(itemID); // Teraz przekazuje itemID do nadrzędnego komponentu
+      }
     }
   };
-
+  
   // Function for loading CSV files
   const loadCSV = (file) => {
     return new Promise((resolve, reject) => {

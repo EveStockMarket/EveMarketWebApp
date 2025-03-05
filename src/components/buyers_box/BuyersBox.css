@@ -1,0 +1,82 @@
+.buyers-box {
+    background-color: #1a1a1a; 
+    position: relative; 
+    max-height: 100%;
+    overflow: hidden; 
+    display: flex;
+    flex-direction: column; 
+}
+
+.buyers-box h3 {
+    margin-top: 0px;
+    margin-bottom: 3px;
+    padding: 0; 
+    font-size: 16px; 
+}
+
+.table-container {
+    flex-grow: 1; 
+    max-height: 400px; 
+    overflow-y: auto; 
+    position: relative;
+    background-color: #1a1a1a;
+    flex-grow: 1; 
+    max-height: 100%; 
+    overflow-y: auto; 
+    scrollbar-width: thin; 
+    scrollbar-color: #444 #1a1a1a;
+}
+
+.scrollable-table {
+    font-size: 12px;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.scrollable-table thead {
+    position: sticky;
+    top: 0;
+    background-color: #2c2c2c; 
+    z-index: 100; 
+    border-bottom: 2px solid #333;
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+    isolation: isolate; 
+}
+
+.scrollable-table thead::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #2c2c2c; 
+    z-index: -1; 
+}
+
+th, td {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 5px;
+    text-align: left;
+}
+
+th {
+    background-color: #2c2c2c; 
+    color: #fff;
+}
+
+tbody tr {
+    height: 15px;
+    background-color: #1a1a1a; 
+}
+
+tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.05); 
+}
+
+.icon {
+    width: 10px; 
+    height: 10px;
+    vertical-align: middle;
+    cursor: pointer;
+}
