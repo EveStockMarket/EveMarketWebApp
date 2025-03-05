@@ -56,6 +56,30 @@ def time_until_expiry(issued, duration):
 
     return days, hours
 
+def analyze_market_data(market_data):
+    df = pd.DataFrame(market_data)
+    buy_orders = df[df['is_buy_order']]
+    sell_orders = df[~df['is_buy_order']]
+
+    avg_buy_price = buy_orders['price'].mean()
+    avg_sell_price = sell_orders['price'].mean()
+    avg_margin = avg_sell_price - avg_buy_price
+
+    avg_quantity = df['quantity'].mean()
+    avg_volume = df['quantity'].mean() 
+
+    median_buy_price = buy_orders['price'].median()
+    median_sell_price = sell_orders['price'].median()
+
+    return {
+        "avg_buy_price": avg_buy_price,
+        "avg_sell_price": avg_sell_price,
+        "avg_margin": avg_margin,
+        "avg_quantity": avg_quantity,
+        "avg_volume": avg_volume,
+        "median_buy_price": median_buy_price,
+        "median_sell_price": median_sell_price
+    }
 
 async def fetch_market_data_for_region(client, region_id, type_id, item_id_base_volume):
     url = f"https://esi.evetech.net/latest/markets/{region_id}/orders/?type_id={type_id}"
@@ -105,10 +129,14 @@ async def fetch_market_data_all_regions(type_id):
         del order['volume_total']
 
     output_path = BASE_DIR / "generated_data" / f"{type_id}_prices.json"
-    async with aiofiles.open(output_path, "w", encoding="utf-8") as json_file:
-        await json_file.write(json.dumps(market_data, indent=4, ensure_ascii=False))
+    output_path.parent.mkdir(parents=True, exist_ok=True)  
+    analysis = analyze_market_data(market_data)
+    result = {"orders": market_data, "analysis": analysis}
 
-    return market_data
+    with open(output_path, "w", encoding="utf-8") as json_file:
+        json.dump(result, json_file, indent=4, ensure_ascii=False)
+
+    return result
 
 
 @router.get("/market_orders/{item_id}")
