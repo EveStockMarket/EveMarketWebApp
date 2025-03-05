@@ -39,7 +39,7 @@ const ItemInfoBox = ({ itemId }) => {
   useEffect(() => {
     if (!itemId) return;
 
-    fetch(`http://16.171.222.100:8000/market_orders/${itemId}`)
+    fetch(`https://16.171.222.100:8000/market_orders/${itemId}`)
       .then(response => response.json())
       .then(data => {
         setAnalysis(data.analysis);
@@ -68,7 +68,7 @@ const ItemInfoBox = ({ itemId }) => {
               <div className="icon-info-container">
                 <div className="item-icon-container">
                   <img
-                    src={`http://16.171.222.100:8000/icon_64/${itemId}`}
+                    src={`https://16.171.222.100:8000/icon_64/${itemId}`}
                     alt={itemDetails.name}
                     className="item-icon"
                   />

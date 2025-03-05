@@ -18,7 +18,7 @@ const SellersBox = ({ itemId }) => {
   useEffect(() => {
     if (!itemId) return; 
 
-    fetch(`http://16.171.222.100:8000/market_orders/${itemId}`)
+    fetch(`https://16.171.222.100:8000/market_orders/${itemId}`)
       .then(response => response.json())
       .then(data => {
         const sellOrders = data.orders.filter(order => !order.is_buy_order); 

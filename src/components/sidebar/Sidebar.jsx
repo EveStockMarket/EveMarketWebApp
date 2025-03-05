@@ -59,7 +59,7 @@ function DisplayIcon({ hasChildren, isOpen, node }) {
   };
 
   const getNodeIcon = () => {
-    const iconPath = node.iconId ? `http://16.171.222.100:8000/icon_32/${node.iconId}` : '/assets/main_icons/0_32.webp';
+    const iconPath = node.iconId ? `https://16.171.222.100:8000/icon_32/${node.iconId}` : '/assets/main_icons/0_32.webp';
     return (
       <LazyImage
         src={iconPath}
