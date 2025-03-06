@@ -6,8 +6,9 @@ import "./SellersBox.css";
 
 const SellersBox = ({ itemId }) => { 
   const [sellers, setSellers] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [sortStates, setSortStates] = useState({
-    price: 2, // Default to descending for price
+    price: 2,
     quantity: 0,
     location: 0,
     system: 0,
@@ -17,8 +18,10 @@ const SellersBox = ({ itemId }) => {
 
   useEffect(() => {
     if (!itemId) return; 
+    setIsLoading(true);
+    setSellers([]); 
 
-    fetch(`https://16.171.222.100:8000/market_orders/${itemId}`)
+    fetch(`http://16.171.222.100:8000/market_orders/${itemId}`)
       .then(response => response.json())
       .then(data => {
         const sellOrders = data.orders.filter(order => !order.is_buy_order); 
@@ -27,7 +30,8 @@ const SellersBox = ({ itemId }) => {
       })
       .catch(error => {
         console.error("Error fetching data: ", error);
-      });
+      })
+      .finally(() => setIsLoading(false));
   }, [itemId]); 
 
   const handleSortClick = (column) => {
@@ -102,8 +106,10 @@ const SellersBox = ({ itemId }) => {
 
   return (
     <div className="sellers-box">
+      {isLoading && <div className="loading-overlay"></div>}
       <h3>Sellers</h3>
       <div className="table-container">
+        {!isLoading && sellers.length > 0 ? (
         <table className="scrollable-table">
           <thead>
             <tr>
@@ -140,6 +146,7 @@ const SellersBox = ({ itemId }) => {
             ))}
           </tbody>
         </table>
+        ) : null}
       </div>
     </div>
   );

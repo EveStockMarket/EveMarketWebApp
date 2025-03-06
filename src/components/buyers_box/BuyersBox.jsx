@@ -6,6 +6,7 @@ import "./BuyersBox.css";
 
 const BuyersBox = ({ itemId }) => {
   const [buyers, setBuyers] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [sortStates, setSortStates] = useState({
     price: 1, 
     quantity: 0,
@@ -19,6 +20,9 @@ const BuyersBox = ({ itemId }) => {
   useEffect(() => {
     if (!itemId) return;
 
+    setIsLoading(true);
+    setBuyers([]); 
+
     fetch(`http://16.171.222.100:8000/market_orders/${itemId}`)
       .then(response => response.json())
       .then(data => {
@@ -28,7 +32,8 @@ const BuyersBox = ({ itemId }) => {
       })
       .catch(error => {
         console.error("Błąd podczas pobierania danych: ", error);
-      });
+      })
+      .finally(() => setIsLoading(false));
   }, [itemId]);
 
   const handleSortClick = (column) => {
@@ -106,19 +111,21 @@ const BuyersBox = ({ itemId }) => {
 
   return (
     <div className="buyers-box">
-      <h3>Kupujący</h3>
+      {isLoading && <div className="loading-overlay"></div>}
+      <h3>Buyers</h3>
       <div className="table-container">
+        {!isLoading && buyers.length > 0 ? (
         <table className="scrollable-table">
           <thead>
             <tr>
               <th onClick={() => handleSortClick('quantity')}>
-                Ilość {getSortIcon('quantity')}
+                Quanity {getSortIcon('quantity')}
               </th>
               <th onClick={() => handleSortClick('price')}>
                 Price {getSortIcon('price')}
               </th>             
               <th onClick={() => handleSortClick('location')}>
-                Lokalizacja {getSortIcon('location')}
+                Location {getSortIcon('location')}
               </th>
               <th onClick={() => handleSortClick('system')}>
                 System {getSortIcon('system')}
@@ -127,10 +134,10 @@ const BuyersBox = ({ itemId }) => {
                 Region {getSortIcon('region')}
               </th>
               <th onClick={() => handleSortClick('minVolume')}>
-                Minimalna ilość {getSortIcon('minVolume')}
+                Min Quanity {getSortIcon('minVolume')}
               </th>
               <th onClick={() => handleSortClick('expires')}>
-                Wygasa za {getSortIcon('expires')}
+                Expires in {getSortIcon('expires')}
               </th>
             </tr>
           </thead>
@@ -143,11 +150,12 @@ const BuyersBox = ({ itemId }) => {
                 <td>{buyer.system}</td>
                 <td>{buyer.region}</td>
                 <td>{buyer.min_volume.toLocaleString()}</td>
-                <td>{`${buyer.remaining_time[0]} dni, ${buyer.remaining_time[1]} godzin`}</td>
+                <td>{`${buyer.remaining_time[0]} days, ${buyer.remaining_time[1]} hours`}</td>
               </tr>
             ))}
           </tbody>
         </table>
+        ) : null}
       </div>
     </div>
   );
