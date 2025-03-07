@@ -1,5 +1,6 @@
 .loading-bars-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
@@ -7,21 +8,21 @@
   position: fixed;
   top: 0;
   left: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* Półprzezroczyste tło */
+  background-color: #1A1A1A; /* Kolor tła */
   z-index: 1000;
 }
 
 .bars {
   display: flex;
-  align-items: flex-end; /* Wyrównanie do dołu */
-  height: 80px; /* Wysokość kontenera */
+  align-items: flex-end;
+  height: 80px;
 }
 
 .bar {
-  width: 6px; /* Węższe paski */
-  height: 20px; /* Wysokość początkowa */
-  background-color: #B5E61D; /* Jasnozielony kolor */
-  margin: 0 4px; /* Odstęp między paskami */
+  width: 6px;
+  height: 20px;
+  background-color: #B5E61D;
+  margin: 0 4px;
   animation: grow 1.2s ease-in-out infinite;
   transform-origin: bottom;
 }
@@ -34,6 +35,14 @@
 
 @keyframes grow {
   0% { transform: scaleY(1); }
-  50% { transform: scaleY(2); } /* Paski rosną 2 razy w górę */
+  50% { transform: scaleY(2); }
   100% { transform: scaleY(1); }
+}
+
+/* Stylizacja logo */
+.loading-logo {
+  margin-top: 20px; /* Odstęp między paskami a logo */
+  width: 150px; /* Dostosowana szerokość */
+  height: auto; /* Automatyczna wysokość */
+  opacity: 0.8; /* Trochę przezroczyste dla efektu */
 }

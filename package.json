@@ -15,7 +15,8 @@
     "lodash.debounce": "^4.0.8",
     "papaparse": "^5.5.2",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.3.0"
   },
   "devDependencies": {
     "@aws-amplify/backend": "^1.14.1",

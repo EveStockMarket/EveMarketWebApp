@@ -307,14 +307,11 @@ const Sidebar = ({ marketGroupsFile, typesFile, onSelect }) => {
 
       <div className="sidebar-content">
         <SearchBar txtFile={"/type_names.txt"} onSelect={handleSearchSelect} onSettingsClick={toggleSettings} onFiltersClick={toggleFilters} />
-        {treeData.length > 0 ? (
+        {
           treeData.map((node, index) => (
             <TreeNode key={index} node={node} onSelect={onSelect} expandedNodes={expandedNodes} />
           ))
-        ) : (
-          <p className="login-label">Loading data...</p>
-        )}
-
+        }
         <SidebarSettings isOpen={isSettingsOpen} onClose={toggleSettings} />
         <SidebarFilters isOpen={isFiltersOpen} onClose={toggleFilters}/>
       </div>

@@ -1,0 +1,80 @@
+/* Market Page Styles */
+.market-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #0d0d0d;
+    color: white;
+}
+
+/* Top Menu */
+.menu-container {
+    height: 80px;
+    background-color: #1f1f1f;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    border-bottom: 2px solid #333;
+}
+
+/* Content Layout */
+.content {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    min-width: 0;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 300px;
+    background-color: #121212;
+    padding: 10px;
+    border-right: 2px solid #333;
+    overflow-y: auto;
+}
+
+/* Main Market Section */
+.main-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 15px;
+    overflow: hidden;
+}
+
+/* Item Info Box */
+.item-info-box {
+    background-color: #1e1e1e;
+    padding: 15px;
+    border: 1px solid #444;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    min-height: 140px;
+}
+
+/* Market Data Section */
+.market-data {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 12px;
+    overflow: hidden;
+}
+
+/* Sellers & Buyers Boxes */
+.sellers-box, .buyers-box {
+    flex: 1;
+    background-color: #1b1b1b;
+    padding: 10px;
+    border: 1px solid #333;
+    border-radius: 8px;
+    overflow-y: auto;
+}
+
+/* Headers Styling */
+h2, h3 {
+    margin-top: 0;
+    color: #ffffff;
+    font-size: 18px;
+}

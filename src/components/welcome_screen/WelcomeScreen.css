@@ -1,0 +1,74 @@
+.welcome-screen {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background: url('/assets/images/home_screen_background.webp') no-repeat center center;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    background-color: #1A1A1A;
+    height: 60px;
+    color: white;
+}
+
+.nav-logo {
+    margin-top: 10px;
+    margin-left: 10px;
+    flex: 0.1; 
+}
+
+.nav-logo img { 
+    width: 100px;
+}
+
+.nav-links {
+    display: flex;
+    flex: 2.8; 
+    justify-content: flex-end; 
+    height: 100%; /* Cała wysokość navbaru */
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 0 20px; 
+    display: flex;
+    align-items: center;
+    height: 100%; /* Cała wysokość navbaru */
+    transition: background 0.3s ease-in-out;
+}
+
+.nav-links a:hover {
+    background-color: #444;
+}
+
+.nav-login {
+    flex: 0.2; 
+    display: flex;
+    justify-content: flex-end;
+    height: 100%;
+}
+
+.login-button {
+    background-color: #CEDE77;
+    color: #1A1A1A;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%; 
+    width: 100%;
+    padding: 0px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.3s ease-in-out;
+}
+
+.login-button:hover {
+    background-color: #0056b3;
+}
