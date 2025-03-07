@@ -7,7 +7,7 @@ import pandas as pd
 import requests
 import json
 from fastapi import APIRouter, HTTPException
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse
 from pathlib import Path
 import logging
 from datetime import datetime, timedelta, UTC
@@ -67,8 +67,8 @@ def analyze_market_data(market_data):
     avg_sell_price = sell_orders['price'].mean()
     avg_margin = avg_sell_price - avg_buy_price
 
-    avg_quantity = int(df['quantity'].mean())
-    avg_volume = int(df['quantity'].mean()) 
+    avg_quantity = df['quantity'].mean()
+    avg_volume = df['quantity'].mean() 
 
     median_buy_price = buy_orders['price'].median()
     median_sell_price = sell_orders['price'].median()
@@ -145,9 +145,23 @@ async def fetch_market_data_all_regions(type_id):
 async def get_market_data(item_id: int):
     json_file = BASE_DIR / "generated_data" / f"{item_id}_prices.json"
     if json_file.exists():
-        return JSONResponse(str(json_file))
+        return FileResponse(json_file)
     else:
         market_data = await fetch_market_data_all_regions(item_id)
         if not market_data:
-            raise HTTPException(status_code=404, detail="Item not found or no market data available")
-        return JSONResponse(str(json_file))
+            raise HTTPException(status_code=404, detail=f"Item {item_id} not found or no market data available")
+        return FileResponse(json_file)
+
+
+@router.get("/all_market_orders")
+async def get_all_market_data():
+    results = {}
+    for item in items_id:
+        try:
+            response = await get_market_data(item)
+            results[item] = response.body
+        except HTTPException as e:
+            results[item] = {"error": e.detail}
+        except Exception as e:
+            results[item] = {"error":str(e)}
+    return JSONResponse(results)
