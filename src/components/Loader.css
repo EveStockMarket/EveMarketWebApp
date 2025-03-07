@@ -1,0 +1,39 @@
+.loading-bars-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Półprzezroczyste tło */
+  z-index: 1000;
+}
+
+.bars {
+  display: flex;
+  align-items: flex-end; /* Wyrównanie do dołu */
+  height: 80px; /* Wysokość kontenera */
+}
+
+.bar {
+  width: 6px; /* Węższe paski */
+  height: 20px; /* Wysokość początkowa */
+  background-color: #B5E61D; /* Jasnozielony kolor */
+  margin: 0 4px; /* Odstęp między paskami */
+  animation: grow 1.2s ease-in-out infinite;
+  transform-origin: bottom;
+}
+
+.bar1 { animation-delay: 0s; }
+.bar2 { animation-delay: 0.1s; }
+.bar3 { animation-delay: 0.2s; }
+.bar4 { animation-delay: 0.3s; }
+.bar5 { animation-delay: 0.4s; }
+
+@keyframes grow {
+  0% { transform: scaleY(1); }
+  50% { transform: scaleY(2); } /* Paski rosną 2 razy w górę */
+  100% { transform: scaleY(1); }
+}

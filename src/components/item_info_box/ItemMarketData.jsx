@@ -6,23 +6,22 @@ const ItemMarketData = ({ itemId, analysis }) => {
   const [marketData, setMarketData] = useState(null);
 
   useEffect(() => {
-    if (!itemId) return; // Nie rób nic, jeśli itemId nie jest wybrany
+    if (!itemId) return; 
 
-    setIsLoading(true); // 🔥 Włącz efekt ładowania
-    setMarketData(null); // 🔥 Usuń stare dane natychmiast
+    setIsLoading(true);
+    setMarketData(null); 
 
   }, [itemId]);
 
   useEffect(() => {
     if (analysis) {
       setMarketData(analysis);
-      setIsLoading(false); // 🔥 Wyłącz efekt ładowania dopiero po otrzymaniu `analysis`
+      setIsLoading(false); 
     }
   }, [analysis]);
 
   return (
     <div className="item-market-data" style={{ position: "relative", overflow: "hidden" }}>
-      {/* 🔥 Gradientowe ładowanie pojawia się od razu po zmianie `itemId` i trwa do momentu otrzymania `analysis` */}
       {isLoading && <div className="loading-overlay"></div>}
 
       {!isLoading && marketData && (
@@ -37,8 +36,8 @@ const ItemMarketData = ({ itemId, analysis }) => {
             </div>
           </div>
           <div className="vol-sell-buy">
-            <h4>Quantity Sell: {marketData.avg_quantity.toLocaleString()}</h4>
-            <h4>Quantity Buy: {marketData.avg_volume.toLocaleString()}</h4>
+            <h4>Quantity Sell: {marketData.avg_quantity.toFixed(0)}</h4>
+            <h4>Quantity Buy: {marketData.avg_volume.toFixed(0)}</h4>
           </div>
           <div className="med-sell-buy">
             <h4>Median Sell: {marketData.median_sell_price.toFixed(2)} ISK</h4>
