@@ -5,11 +5,13 @@ import "./WelcomeScreen.css";
 
 const WelcomeScreen = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [animate, setAnimate] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1000); 
+      setAnimate(true);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -36,6 +38,20 @@ const WelcomeScreen = () => {
               <Link to="/login" className="login-button">Log In</Link>
             </div>
           </nav>
+
+          <div className="welcome-content">
+            <img 
+              src="/assets/main_icons/evestockmarket_logo_eve.png" 
+              alt="EVE" 
+              className={`eve-logo ${animate ? "animate-eve" : ""}`} 
+            />
+            <img 
+              src="/assets/main_icons/evestockmarket_logo_evestock.png" 
+              alt="Stock Market" 
+              className={`stockmarket-logo ${animate ? "animate-stockmarket" : ""}`} 
+            />
+            <button className="begin-button"></button>
+          </div>
         </>
       )}
     </div>

@@ -6,6 +6,8 @@
     background-size: cover;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .navbar {
@@ -14,10 +16,12 @@
     background-color: #1A1A1A;
     height: 60px;
     color: white;
+    width: 100%;
+    position: absolute;
+    top: 0;
 }
 
 .nav-logo {
-    margin-top: 10px;
     margin-left: 10px;
     flex: 0.1; 
 }
@@ -30,7 +34,7 @@
     display: flex;
     flex: 2.8; 
     justify-content: flex-end; 
-    height: 100%; /* Cała wysokość navbaru */
+    height: 100%;
 }
 
 .nav-links a {
@@ -40,7 +44,7 @@
     padding: 0 20px; 
     display: flex;
     align-items: center;
-    height: 100%; /* Cała wysokość navbaru */
+    height: 100%;
     transition: background 0.3s ease-in-out;
 }
 
@@ -56,19 +60,89 @@
 }
 
 .login-button {
-    background-color: #CEDE77;
+    background-color: #bce64f;
     color: #1A1A1A;
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%; 
     width: 100%;
-    padding: 0px;
     text-decoration: none;
     font-weight: bold;
     transition: background 0.3s ease-in-out;
 }
 
 .login-button:hover {
-    background-color: #0056b3;
+    background-color: #d5ff6f;
+}
+
+.welcome-content {
+    position: absolute;
+    left: 50%;
+    top: 30%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px; 
+    width: 100%;
+}
+
+.eve-logo, .stockmarket-logo {
+    max-width: 40%;
+    height: auto;
+    opacity: 0;
+    filter: drop-shadow(0px 10px 20px rgba(0, 0, 0, 0.6)); /* Cień pod logo */
+}
+
+
+.eve-logo {
+    animation: moveUp 1.5s ease-out forwards;
+}
+
+.stockmarket-logo {
+    animation: moveDown 1.5s ease-out forwards;
+    animation-delay: 0.5s;
+}
+
+@keyframes moveUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes moveDown {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.begin-button {
+    width: 350px; 
+    height: 100px;
+    background: url('/assets/main_icons/begin_button.png') no-repeat center center; 
+    background-size: 50%; 
+    background-color: #bce64f;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    clip-path: polygon(5% 0%, 95% 0%, 100% 10%, 100% 90%, 95% 100%, 5% 100%, 0% 90%, 0% 10%);
+    transition: background 0.3s ease-in-out;
+}
+
+.begin-button:hover{
+    background-color: #d5ff6f;
 }
