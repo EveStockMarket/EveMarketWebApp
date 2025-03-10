@@ -39,6 +39,7 @@ const SellersBox = ({ itemId }) => {
       price: 0,
       quantity: 0,
       location: 0,
+      security: 0,
       system: 0,
       region: 0,
       expires: 0
@@ -73,6 +74,10 @@ const SellersBox = ({ itemId }) => {
           case 'location':
             valueA = a.location;
             valueB = b.location;
+            break;
+          case 'security':
+            valueA = a.security;
+            valueB = b.security;
             break;
           case 'system':
             valueA = a.system;
@@ -122,6 +127,9 @@ const SellersBox = ({ itemId }) => {
               <th onClick={() => handleSortClick('location')}>
                 Location {getSortIcon('location')}
               </th>
+              <th onClick={() => handleSortClick('security')}>
+                Security {getSortIcon('security')}
+              </th>
               <th onClick={() => handleSortClick('system')}>
                 System {getSortIcon('system')}
               </th>
@@ -139,6 +147,7 @@ const SellersBox = ({ itemId }) => {
                 <td>{seller.quantity.toLocaleString()}</td>
                 <td>{seller.price.toFixed(2)} ISK</td>
                 <td>{seller.location}</td>
+                <td>{seller.security}</td>
                 <td>{seller.system}</td>
                 <td>{seller.region}</td>
                 <td>{`${seller.remaining_time[0]} days, ${seller.remaining_time[1]} hours`}</td>

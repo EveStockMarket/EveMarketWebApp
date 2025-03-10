@@ -28,10 +28,33 @@ const WelcomeScreen = () => {
             </div>
 
             <div className="nav-links">
-              <Link to="/industry-calculator">Industry Calculator</Link>
-              <Link to="/market">Market</Link>
-              <Link to="/mining-calculator">Mining Calculator</Link>
-              <Link to="/hauling-calculator">Hauling Calculator</Link>
+              <div className="nav-item">
+                <Link to="/market">Market</Link>
+              </div>
+
+              <div className="nav-item">
+                <Link to="/industry">Industry</Link>
+                <div className="dropdown-menu">
+                  <Link to="/industry/mining">Mining</Link>
+                  <Link to="/industry/manufacturing">Manufacturing</Link>
+                </div>
+              </div>
+
+              <div className="nav-item">
+                <Link to="/transport">Transport</Link>
+                <div className="dropdown-menu">
+                  <Link to="/transport/freight">Freight</Link>
+                  <Link to="/transport/logistics">Logistics</Link>
+                </div>
+              </div>
+
+              <div className="nav-item">
+                <Link to="/resources">Resources</Link>
+                <div className="dropdown-menu">
+                  <Link to="/resources/ore">Ore</Link>
+                  <Link to="/resources/gas">Gas</Link>
+                </div>
+              </div>
             </div>
 
             <div className="nav-login">

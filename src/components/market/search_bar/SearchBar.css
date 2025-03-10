@@ -13,6 +13,7 @@
 }
 
 .search-bar-placeholder {
+    font-family: 'Roboto Condensed', sans-serif;
     flex: 1;
     min-width: 20px;
     padding: 8px;
