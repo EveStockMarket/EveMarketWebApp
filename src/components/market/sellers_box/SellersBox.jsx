@@ -11,6 +11,7 @@ const SellersBox = ({ itemId }) => {
     price: 2,
     quantity: 0,
     location: 0,
+    security: 0,
     system: 0,
     region: 0,
     expires: 0
@@ -45,7 +46,6 @@ const SellersBox = ({ itemId }) => {
       expires: 0
     };
     
-    // Calculate the new state for the clicked column
     let newState;
     if (sortStates[column] === 0) {
       newState = 1;
@@ -56,7 +56,6 @@ const SellersBox = ({ itemId }) => {
 
     setSortStates(newSortStates);
 
-    // Sorting logic
     const newSellers = [...sellers];
 
     if (newState !== 0) {
@@ -109,6 +108,21 @@ const SellersBox = ({ itemId }) => {
     }
   };
 
+  const getSecurityColor = (security) => {
+    if (security >= 0.9) return "#4D6FD8";       
+    if (security >= 0.8) return "#6097EC"; 
+    if (security >= 0.7) return "#77CAF0";      
+    if (security >= 0.6) return "#80D9AA";       
+    if (security >= 0.5) return "#8CE268"; 
+    if (security >= 0.4) return "#EFFF97";  
+    if (security >= 0.3) return "#D0722D";       
+    if (security >= 0.2) return "#B65427"; 
+    if (security >= 0.1) return "#AB2D1E";  
+    if (security >= 0.0) return "#642920";  
+    if (security < 0.0)  return "#853668";
+    return "red";                              
+  };
+
   return (
     <div className="sellers-box">
       {isLoading && <div className="loading-overlay"></div>}
@@ -147,7 +161,9 @@ const SellersBox = ({ itemId }) => {
                 <td>{seller.quantity.toLocaleString()}</td>
                 <td>{seller.price.toFixed(2)} ISK</td>
                 <td>{seller.location}</td>
-                <td>{seller.security}</td>
+                <td style={{ color: getSecurityColor(seller.security), padding: "5px" }}>
+                  {seller.security.toFixed(2)}
+                </td>
                 <td>{seller.system}</td>
                 <td>{seller.region}</td>
                 <td>{`${seller.remaining_time[0]} days, ${seller.remaining_time[1]} hours`}</td>

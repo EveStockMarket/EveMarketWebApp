@@ -11,6 +11,7 @@ const BuyersBox = ({ itemId }) => {
     price: 1, 
     quantity: 0,
     location: 0,
+    security: 0,
     system: 0,
     region: 0,
     minVolume: 0,
@@ -41,6 +42,7 @@ const BuyersBox = ({ itemId }) => {
       price: 0,
       quantity: 0,
       location: 0,
+      security: 0,
       system: 0,
       region: 0,
       minVolume: 0,
@@ -74,6 +76,10 @@ const BuyersBox = ({ itemId }) => {
           case 'location':
             valueA = a.location;
             valueB = b.location;
+            break;
+          case 'security':
+            valueA = a.security;
+            valueB = b.security;
             break;
           case 'system':
             valueA = a.system;
@@ -109,6 +115,21 @@ const BuyersBox = ({ itemId }) => {
     }
   };
 
+  const getSecurityColor = (security) => {
+    if (security >= 0.9) return "#4D6FD8";       
+    if (security >= 0.8) return "#6097EC"; 
+    if (security >= 0.7) return "#77CAF0";      
+    if (security >= 0.6) return "#80D9AA";       
+    if (security >= 0.5) return "#8CE268"; 
+    if (security >= 0.4) return "#EFFF97";  
+    if (security >= 0.3) return "#D0722D";       
+    if (security >= 0.2) return "#B65427"; 
+    if (security >= 0.1) return "#AB2D1E";  
+    if (security >= 0.0) return "#642920";  
+    if (security < 0.0)  return "#853668";
+    return "red";                              
+  };
+
   return (
     <div className="buyers-box">
       {isLoading && <div className="loading-overlay"></div>}
@@ -126,6 +147,9 @@ const BuyersBox = ({ itemId }) => {
               </th>             
               <th onClick={() => handleSortClick('location')}>
                 Location {getSortIcon('location')}
+              </th>
+              <th onClick={() => handleSortClick('security')}>
+                Security {getSortIcon('security')}
               </th>
               <th onClick={() => handleSortClick('system')}>
                 System {getSortIcon('system')}
@@ -147,6 +171,9 @@ const BuyersBox = ({ itemId }) => {
                 <td>{buyer.quantity.toLocaleString()}</td>
                 <td>{buyer.price.toFixed(2)} ISK</td>
                 <td>{buyer.location}</td>
+                <td style={{ color: getSecurityColor(buyer.security), padding: "5px" }}>
+                  {buyer.security.toFixed(2)}
+                </td>
                 <td>{buyer.system}</td>
                 <td>{buyer.region}</td>
                 <td>{buyer.min_volume.toLocaleString()}</td>
