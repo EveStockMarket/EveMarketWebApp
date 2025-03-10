@@ -1,7 +1,6 @@
 import asyncio
+import aiohttp
 import os
-
-import aiofiles
 import httpx
 import pandas as pd
 import requests
@@ -24,28 +23,27 @@ items_df = pd.read_csv('./file_data/invTypes.csv')
 regions_df = pd.read_csv('./file_data/mapRegions.csv')
 locations_df = pd.read_csv('./file_data/staStations.csv')
 stations_df = pd.read_csv('./file_data/mapSolarSystems.csv')
+security_df = pd.read_json('./generated_data/system_sec_data/security_status.json')
 
 regions_dict = dict(zip(regions_df['regionID'], regions_df['regionName']))
 regions_id_list = regions_df['regionID'].tolist()
 locations_dict = dict(zip(locations_df['stationID'], locations_df['stationName']))
-stations_dict = dict(zip(stations_df['solarSystemID'], stations_df['solarSystemName']))
+systems_dict = dict(zip(stations_df['solarSystemID'], stations_df['solarSystemName']))
 items_base_volume = dict(zip(items_df['typeID'], items_df['volume']))
 items_id = items_df['typeID'].tolist()
-
+systems_ids = stations_df["solarSystemID"].astype(str).tolist()
+sec_systems_dict = dict(zip(security_df['system_id'], security_df['security_status']))
 
 def convert_location_id_to_name(location_id):
     return locations_dict.get(location_id, f"Unknown Station {location_id}")
 
-
 def convert_system_id_to_name(system_id):
-    return stations_dict.get(system_id, f"Unknown System {system_id}")
-
+    return systems_dict.get(system_id, f"Unknown System {system_id}")
 
 def check_item(type_id):
     url = f"https://esi.evetech.net/latest/universe/types/{type_id}/"
     response = requests.get(url)
     return response.status_code == 200
-
 
 def time_until_expiry(issued, duration):
     issued_dt = datetime.strptime(issued, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=UTC)
@@ -82,6 +80,33 @@ def analyze_market_data(market_data):
         "median_buy_price": median_buy_price,
         "median_sell_price": median_sell_price
     }
+
+async def fetch_security_status(session, system_id):
+    url = f"https://esi.evetech.net/latest/universe/systems/{system_id}"
+    try:
+        async with session.get(url) as response:
+            if response.status == 200:
+                data = await response.json()
+                return {"system_id": system_id, "security_status": data.get("security_status", None)}
+            else:
+                return {"system_id": system_id, "error": response.status}
+    except Exception as e:
+        return {"system_id": system_id, "error": str(e)}
+
+async def fetch_all_security_status():
+    async with aiohttp.ClientSession() as session:
+        tasks = [fetch_security_status(session, system_id) for system_id in systems_ids]
+        security_status_data = await asyncio.gather(*tasks)
+
+    output_dir = "./generated_data/system_sec_data/"
+    output_file = os.path.join(output_dir, "security_status.json")
+
+    os.makedirs(output_dir, exist_ok=True)
+
+    with open(output_file, "w") as f:
+        json.dump(security_status_data, f, indent=4)
+
+    print(f"Plik został zapisany: {output_file}")
 
 async def fetch_market_data_for_region(client, region_id, type_id, item_id_base_volume):
     url = f"https://esi.evetech.net/latest/markets/{region_id}/orders/?type_id={type_id}"
@@ -121,6 +146,7 @@ async def fetch_market_data_all_regions(type_id):
         order['location'] = convert_location_id_to_name(order['location_id'])
         order['system'] = convert_system_id_to_name(order['system_id'])
         order['remaining_time'] = time_until_expiry(order['issued'], order['duration'])
+        order['security_status'] = sec_systems_dict.get(order['system_id'], None)
         del order['duration']
         del order['issued']
         del order['location_id']
@@ -139,7 +165,6 @@ async def fetch_market_data_all_regions(type_id):
         json.dump(result, json_file, indent=4, ensure_ascii=False)
 
     return result
-
 
 @router.get("/market_orders/{item_id}")
 async def get_market_data(item_id: int):
@@ -165,3 +190,6 @@ async def get_all_market_data():
         except Exception as e:
             results[item] = {"error":str(e)}
     return JSONResponse(results)
+
+if __name__ == "__main__":
+    asyncio.run(fetch_all_security_status())
