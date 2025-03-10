@@ -146,7 +146,7 @@ async def fetch_market_data_all_regions(type_id):
         order['location'] = convert_location_id_to_name(order['location_id'])
         order['system'] = convert_system_id_to_name(order['system_id'])
         order['remaining_time'] = time_until_expiry(order['issued'], order['duration'])
-        order['security_status'] = sec_systems_dict.get(order['system_id'], None)
+        order['security'] = sec_systems_dict.get(order['system_id'], None)
         del order['duration']
         del order['issued']
         del order['location_id']
